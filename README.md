@@ -2,6 +2,6 @@
 Practice project for data engineering
 
 ## Todo
-- Setup db with docker
+- Setup URI scrapy docker
+- Setup Airflow with docker
 
-## Setup

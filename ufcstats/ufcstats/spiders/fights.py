@@ -5,7 +5,7 @@ import scrapy
 class FightsSpider(scrapy.Spider):
     name = "fights"
     allowed_domains = ["ufcstats.com"]
-    start_urls = ["http://ufcstats.com/statistics/events/completed?page=all"]
+    start_urls = ["http://ufcstats.com/statistics/events/completed"] # removed ?page=all 
 
     custom_settings = {
         'ITEM_PIPELINES': {
