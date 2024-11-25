@@ -1,7 +1,7 @@
 import datetime
 from airflow import DAG
 from airflow.operators.docker_operator import DockerOperator
-from airflow.operators.empty import EmptyOperator 
+from docker.types import Mount
 
 default_args = {
     'owner': 'airflow',
@@ -13,22 +13,35 @@ default_args = {
 }
 
 dag = DAG(
-    'scrapy_events',
+    'dbt_tables',
     default_args=default_args,
-    description='Scrape UFC events',
+    description='generate dbt tables for ufc stats',
     schedule_interval='@weekly',
     start_date=datetime.datetime(2024, 1, 1),
     catchup=False,
-    tags=['scrapy'],
+    tags=['dbt'],
 )
 
 scrape_events = DockerOperator(
-    task_id='scrape_events',
-    image='ufc-data-project-scrapy',
+    task_id='dbt_tables',
+    image='ghcr.io/dbt-labs/dbt-postgres:1.8.2',
     api_version='auto',
+    command='run',
     auto_remove=True,
-    command='scrapy crawl events',
     docker_url="unix://var/run/docker.sock",
-    network_mode="ufc-data-project_default",    
+    working_dir='/dbt',
+    network_mode="bridge",
+    mounts=[
+        Mount(
+            target='/dbt',
+            source='/home/aboud/programming/ufc-data-project/ufc-dbt',
+            type='bind',
+        ),
+        Mount(
+            target='/root/.dbt',
+            source='/home/aboud/.dbt',
+            type='bind',
+        )
+    ],
     dag=dag,
 )

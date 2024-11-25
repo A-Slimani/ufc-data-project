@@ -13,21 +13,21 @@ default_args = {
 }
 
 dag = DAG(
-    'scrapy_events',
+    'scrapy_fighters',
     default_args=default_args,
-    description='Scrape UFC events',
+    description='Scrape UFC fighters',
     schedule_interval='@weekly',
     start_date=datetime.datetime(2024, 1, 1),
     catchup=False,
     tags=['scrapy'],
 )
 
-scrape_events = DockerOperator(
-    task_id='scrape_events',
+scrape_fighters = DockerOperator(
+    task_id='scrape_fighters',
     image='ufc-data-project-scrapy',
     api_version='auto',
     auto_remove=True,
-    command='scrapy crawl events',
+    command='scrapy crawl fighters',
     docker_url="unix://var/run/docker.sock",
     network_mode="ufc-data-project_default",    
     dag=dag,

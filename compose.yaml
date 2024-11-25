@@ -1,6 +1,6 @@
 services:
   ufc-db: 
-    image: postgres:latest
+    image: postgres:17.2
     environment:
       POSTGRES_USER: aboud
       POSTGRES_PASSWORD: ufc123 
@@ -9,29 +9,106 @@ services:
       - "5432:5432"
     volumes:
       - ufc-data:/var/lib/postgresql/data
+      - ./Dockerfiles/init_ufcdb.sql:/docker-entrypoint-initdb.d/init_ufcdb.sql
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "aboud", "-d", "ufcdb"]
+      interval: 2m 
+      timeout: 30s
+      retries: 5
+      start_period: 5s
+    restart: always
 
   scrapy:
     build: 
       context: .
       dockerfile: Dockerfiles/scrapy.Dockerfile
+    depends_on:
+      - ufc-db 
     volumes:
       - .:/app
   
-  # postgres:
-  #   image: postgres:13
-  #   environment:
-  #     POSTGRES_USER: airflow
-  #     POSTGRES_PASSWORD: airflow
-  #     POSTGRES_DB: airflow
-  #   volumes:
-  #     - postgres-db-volume:/var/lib/postgresql/data
-  #   healthcheck:
-  #     test: ["CMD", "pg_isready", "-U", "airflow"]
-  #     interval: 10s
-  #     retries: 5
-  #     start_period: 5s
-  #   restart: always
+  airflow-db:
+    image: postgres:17.2
+    environment:
+      POSTGRES_USER: airflow
+      POSTGRES_PASSWORD: airflow
+      POSTGRES_DB: airflow
+    volumes:
+      - airflow-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "airflow", "-d", "airflow"]
+      interval: 2m 
+      retries: 5
+      start_period: 5s
+    restart: always
+  
+  init-airflow:
+    image: apache/airflow:2.10.3
+    depends_on:
+      - airflow-db 
+    environment:
+      AIRFLOW__CORE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@airflow-db/airflow
+    command: >
+      bash -c "airflow db init && airflow users create --username admin --password admin --firstname admin --lastname admin --role Admin --email admin@example.com"
+  
+  webserver:
+    build: 
+      context: .
+      dockerfile: Dockerfiles/airflow.Dockerfile
+    user: root
+    depends_on:
+      - airflow-db
+      - ufc-db
+    volumes:
+      - ./dags:/opt/airflow/dags
+      - ./logs:/opt/airflow/logs
+      - ./plugins:/opt/airflow/plugins
+      - /var/run/docker.sock:/var/run/docker.sock
+    ports:
+      - "8080:8080"
+    environment:
+      AIRFLOW__CORE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@airflow-db/airflow
+      AIRFLOW__CORE__LOAD_EXAMPLES: "false"
+      AIRFLOW__WEBSERVER__SECRET_KEY: "369e0e13a5ee7a7ebd3c51dfe3108c5c1ac8a0b01286ff0969eaaf726dd0d66f"
+    healthcheck:
+      test: ["CMD", "curl", "--fail", "http://localhost:8080/health"]
+      interval: 2m 
+      retries: 5
+    restart: always
+    command: airflow webserver
+  
+  scheduler:
+    build: 
+      context: .
+      dockerfile: Dockerfiles/airflow.Dockerfile
+    user: root
+    depends_on:
+      - airflow-db
+      - ufc-db
+    volumes:
+      - ./dags:/opt/airflow/dags
+      - ./logs:/opt/airflow/logs
+      - ./plugins:/opt/airflow/plugins
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      AIRFLOW__CORE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@airflow-db/airflow
+      AIRFLOW__CORE__LOAD_EXAMPLES: "false"
+      AIRFLOW__WEBSERVER__SECRET_KEY: "369e0e13a5ee7a7ebd3c51dfe3108c5c1ac8a0b01286ff0969eaaf726dd0d66f"
+    restart: always
+    command: airflow scheduler
+  
+  dbt:
+    image: ghcr.io/dbt-labs/dbt-postgres:1.8.2
+    command:
+      ["run", "--profiles-dir", "/root/.dbt"]
+    volumes:
+      - ./ufc-dbt:/usr/app/dbt
+      - ~/.dbt:/root/.dbt
+    depends_on:
+      - ufc-db 
+    environment:
+      - DBT_PROFILES_DIR=/root/.dbt
 
 volumes:
   ufc-data:
-  postgres-db-volume:
+  airflow-data:

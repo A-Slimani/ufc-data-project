@@ -1,0 +1,14 @@
+version: 2
+
+sources:
+  - name: ufcdb
+    description: "This is the source for the UFC database"
+    database: ufcdb
+    schema: public
+    tables:
+      - name: fighters
+        description: "contains information about UFC fighters"
+      - name: events
+        description: "contains information about UFC events"
+      - name: fights
+        description: "contains information about UFC fights"

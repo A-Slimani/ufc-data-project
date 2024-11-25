@@ -6,7 +6,7 @@ import scrapy
 class EventsSpider(scrapy.Spider):
     name = "events"
     allowed_domains = ["ufcstats.com"]
-    start_urls = ["http://ufcstats.com/statistics/events/completed"] # change to all once pipeline is working
+    start_urls = ["http://ufcstats.com/statistics/events/completed?page=all"] # change to all once pipeline is working
 
     custom_settings = {
         'ITEM_PIPELINES': {

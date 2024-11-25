@@ -1,5 +1,6 @@
-from sqlalchemy import Column, Integer, String, Boolean, Date, UniqueConstraint
+from sqlalchemy import Column, Integer, String, Boolean, Date, UniqueConstraint, ForeignKey
 from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import relationship
 
 Base = declarative_base()
 
@@ -30,17 +31,18 @@ class Event(Base):
     __tablename__ = 'events'
     
     id = Column(Integer, primary_key=True, autoincrement=True)
-    name = Column(String, nullable=False)
+    name = Column(String, nullable=False, unique=True)
     date = Column(Date, nullable=False)
     location = Column(String, nullable=False)
 
+    fights = relationship("Fight", back_populates="event")
     __table_args__ = (UniqueConstraint('name', 'date', name='event_unique_constraint'),)
 
 class Fight(Base):
     __tablename__ = 'fights'
 
     id = Column(Integer, primary_key=True, autoincrement=True)
-    event_name = Column(String, nullable=False)
+    event_name = Column(String, ForeignKey('events.name'), nullable=False)
     r_fighter = Column(String, nullable=False)
     l_fighter = Column(String, nullable=False)
     r_status = Column(String, nullable=False)
@@ -59,4 +61,5 @@ class Fight(Base):
     round = Column(Integer, nullable=False)
     time = Column(String, nullable=False)
 
+    event = relationship("Event", back_populates="fights")
     __table_args__ = (UniqueConstraint('r_fighter', 'l_fighter', 'event_name', 'round', 'time', name='fight_unique_constraint'),)  

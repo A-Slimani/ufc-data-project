@@ -8,6 +8,9 @@ COPY requirements.txt .
 
 RUN pip install --no-cache-dir -r requirements.txt
 
-COPY . .
+# probably dont have to copy the whole directory
+COPY . . 
 
 WORKDIR /app/ufcstats
+
+CMD ["sleep", "300"]

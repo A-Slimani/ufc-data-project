@@ -1,0 +1,130 @@
+
+version: 2
+
+models:
+  - name: fighters 
+    description: "Contains information about UFC fighters"
+    columns:
+      - name: id
+        description: "The primary key for this table"
+        data_tests:
+          - unique
+          - not_null
+      - name: first_name 
+        description: "first name of the fighter"
+        data_tests:
+          - not_null
+      - name: last_name 
+        description: "last name of the fighter"
+        data_tests:
+          - not_null
+      - name: nickname 
+        description: "nickname of the fighter"
+      - name: weight 
+        description: "weight of the fighter"
+      - name: height 
+        description: "height of the fighter"
+      - name: reach  
+        description: "reach of the fighter"
+      - name: stance 
+        description: "stance of the fighter"
+      - name: wins 
+        description: "number of wins"
+        data_tests:
+          - not_null
+      - name: losses 
+        description: "number of losses"
+        data_tests:
+          - not_null
+      - name: draws 
+        description: "number of draws"
+        data_tests:
+          - not_null
+      - name: belt
+        description: "Is the fighter a champion"
+        data_tests:
+          - not_null
+
+  - name: events
+    description: "Contains information about UFC events"
+    columns:
+      - name: id
+        description: "The primary key for this table"
+        data_tests:
+          - unique
+          - not_null
+      - name: date
+        description: "date of the event"
+        data_tests:
+          - not_null
+      - name: location
+        description: "location of the event"
+        data_tests:
+          - not_null
+      - name: name
+        description: "name of the event"
+        data_tests:
+          - not_null
+
+  - name: fights
+    description: "Contains information about UFC fights"
+    columns:
+      - name: id
+        description: "The primary key for this table"
+        data_tests:
+          - unique
+          - not_null
+      - name: event_name
+        description: "name of the event"
+        data_tests:
+          - not_null
+      - name: r_fighter 
+        description: "fighter on the right side"
+        data_tests:
+          - not_null
+      - name: l_fighter 
+        description: "fighter on the left side"
+        data_tests:
+          - not_null
+      - name: r_status 
+        description: "status of the right fighter (W / L / D)"
+        data_tests:
+          - not_null
+      - name: l_status 
+        description: "status of the left fighter (W / L / D)"
+        data_tests:
+          - not_null
+      - name: r_knockdowns 
+        description: "number of knockdowns by the right fighter"
+      - name: l_knockdowns 
+        description: "number of knockdowns by the left fighter"
+      - name: r_significant_strikes
+        description: "number of significant strikes by the right fighter"
+      - name: l_significant_strikes 
+        description: "number of significant strikes by the left fighter"
+      - name: r_takedowns 
+        description: "number of takedowns by the right fighter"
+      - name: l_takedowns 
+        description: "number of takedowns by the left fighter"
+      - name: r_submission_attempts
+        description: "number of sub attempts by the right fighter"
+      - name: l_submission_attempts
+        description: "number of sub attempts by the left fighter"
+      - name: weight_class 
+        description: "weight class of the fight"
+        data_tests:
+          - not_null
+      - name: method 
+        description: "status of the fight (KO / SUB / DEC) or (NC / DQ) or DRAW"
+        data_tests:
+          - not_null
+      - name: sub_method 
+        description: "further information of the status"
+      - name: round
+        description: "rounds fought"
+        data_tests:
+          - not_null
+      - name: time
+        description: "time of the fight in the current round"
+        data_tests:
+          - not_null
