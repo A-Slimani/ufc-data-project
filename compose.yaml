@@ -52,7 +52,7 @@ services:
       bash -c "airflow db init && airflow users create --username admin --password admin --firstname admin --lastname admin --role Admin --email admin@example.com"
   
   git-sync:
-    image: k8s.gcr.io/git-sync:v3.6.3
+    image: k8s.gcr.io/git-sync:v4.3.0
     volumes:
       - dags-data:/dags
     environment:
