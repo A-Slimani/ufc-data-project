@@ -51,18 +51,6 @@ services:
     command: >
       bash -c "airflow db init && airflow users create --username admin --password admin --firstname admin --lastname admin --role Admin --email admin@example.com"
   
-  git-sync:
-    image: registry.k8s.io/git-sync/git-sync:v4.3.0
-    volumes:
-      - dags-data:/dags
-    environment:
-      - GIT_SYNC_REPO=https://github.com/A-Slimani/ufc-data-project.git
-      - GIT_SYNC_BRANCH=master
-      - GIT_SYNC_ROOT=/dags
-      - GIT_SYNC_DEST=ufc-data-project
-      - GIT_SYNC_WAIT=60
-    restart: always
-
   webserver:
     build: 
       context: .
@@ -72,7 +60,7 @@ services:
       - airflow-db
       - ufc-db
     volumes:
-      - dags-data:/opt/airflow/dags:ro
+      - ./dags:/opt/airflow/dags
       - ./logs:/opt/airflow/logs
       - ./plugins:/opt/airflow/plugins
       - /var/run/docker.sock:/var/run/docker.sock
@@ -98,7 +86,7 @@ services:
       - airflow-db
       - ufc-db
     volumes:
-      - dags-data:/opt/airflow/dags:ro
+      - ./dags:/opt/airflow/dags
       - ./logs:/opt/airflow/logs
       - ./plugins:/opt/airflow/plugins
       - /var/run/docker.sock:/var/run/docker.sock
@@ -122,8 +110,6 @@ services:
       - DBT_PROFILES_DIR=/root/.dbt
   
 
-
 volumes:
   ufc-data:
   airflow-data:
-  dags-data:
