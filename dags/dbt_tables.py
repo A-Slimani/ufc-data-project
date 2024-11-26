@@ -9,7 +9,7 @@ default_args = {
     'email_on_failure': False,
     'email_on_retry': False,
     'retries': 1,
-    'retry_delay': datetime.timedelta(minutes=1),
+    'retry_delay': datetime.timedelta(seconds=10),
 }
 
 dag = DAG(

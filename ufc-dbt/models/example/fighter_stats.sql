@@ -1,6 +1,7 @@
 SELECT 
     first_name || ' ' || last_name AS fighter_name,
     weight,
+    {{ generate_weight_classes('weight') }} AS weight_class,
     height,
     reach,
     stance,
@@ -11,3 +12,7 @@ SELECT
     draws
 FROM 
     {{ source('ufcdb', 'fighters') }}
+LEFT JOIN 
+    {{ source('ufcdb', 'fights') }}
+ON
+    fighter

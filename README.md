@@ -14,7 +14,7 @@ Practice project for data engineering.
     - Gender
 - change from sqlalchemy to raw sql
 - Find ways to remove rendundant information
-    - Change columns (weight, stance) to an enum
+    - Change columns (weight, stance, method) to an enum
 - Update the dates of the dags to reflect after an event has been finished
     - e.g. Run on sunday evenings after ufc events are finished
 - Fix the error output when it finds an existing record
@@ -23,3 +23,11 @@ Practice project for data engineering.
     - include a weight class column
 - remove fighters who havent fought in the ufc
     - For some reason they are in the ufcstats fighters db
+
+## Notes
+Saving table space / size with enums
+- Currently the size of the fighter table is `432kb` 
+- Check the all the distinct stances with command `SELECT DISTINCT(stance) FROM fighters;`
+    - The stances are `Switch, Orthodox, Open Stance, Southpaw, Sideways, EmptyString???`
+- Script used to convert the column into an enum
+- After converting the stance to enums the table is now 
