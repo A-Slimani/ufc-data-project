@@ -17,9 +17,13 @@ load_dotenv()
 class fighter_pipeline:
 
     def __init__(self):
-        self.engine = create_engine(os.getenv("URI"))
-        create_table(self.engine)
-        self.Session = sessionmaker(bind=self.engine)
+        try:
+            self.engine = create_engine(os.getenv("URI"))
+            create_table(self.engine)
+            self.Session = sessionmaker(bind=self.engine)
+        except:
+            print("Error connecting to database")
+            raise
 
     def process_item(self, item, spider):
         session = self.Session()
@@ -44,9 +48,13 @@ class fighter_pipeline:
 class event_pipeline:
     
     def __init__(self):
-        self.engine = create_engine(os.getenv("URI"))
-        create_table(self.engine)
-        self.Session = sessionmaker(bind=self.engine)
+        try:
+            self.engine = create_engine(os.getenv("URI"))
+            create_table(self.engine)
+            self.Session = sessionmaker(bind=self.engine)
+        except:
+            print("Error connecting to database")
+            raise
     
     def process_item(self, item, spider):
         session = self.Session()
@@ -72,9 +80,13 @@ class event_pipeline:
 class fight_pipeline:
 
     def __init__(self):
-        self.engine = create_engine(os.getenv("URI"))
-        create_table(self.engine)
-        self.Session = sessionmaker(bind=self.engine)
+        try:
+            self.engine = create_engine(os.getenv("URI"))
+            create_table(self.engine)
+            self.Session = sessionmaker(bind=self.engine)
+        except:
+            print("Error connecting to database")
+            raise
     
     def process_item(self, item, spider):
         session = self.Session()
