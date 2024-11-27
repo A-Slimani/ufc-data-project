@@ -19,6 +19,7 @@ class fighter_pipeline:
     def __init__(self):
         try:
             self.engine = create_engine(os.getenv("URI"))
+            create_table(self.engine)
             self.Session = sessionmaker(bind=self.engine)
         except:
             print("Error connecting to database")
@@ -47,16 +48,9 @@ class fighter_pipeline:
 class event_pipeline:
     
     def __init__(self):
-        try:
-            uri = os.getenv("URI")
-            if not uri:
-                raise ValueError("Database URI is empty or not set")
-            self.engine = create_engine(uri)
-            create_table(self.engine)
-            self.Session = sessionmaker(bind=self.engine)
-        except Exception as e:
-            print(f"Error connecting to database: {e}")
-            raise
+        self.engine = create_engine(os.getenv("URI"))
+        create_table(self.engine)
+        self.Session = sessionmaker(bind=self.engine)
     
     def process_item(self, item, spider):
         session = self.Session()

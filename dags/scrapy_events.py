@@ -3,6 +3,7 @@ from airflow import DAG
 from airflow.operators.docker_operator import DockerOperator
 from airflow.operators.empty import EmptyOperator 
 
+
 default_args = {
     'owner': 'airflow',
     'depends_on_past': False,
@@ -30,5 +31,8 @@ scrape_events = DockerOperator(
     command='scrapy crawl events',
     docker_url="unix://var/run/docker.sock",
     network_mode="ufc-data-project_default",    
+    environment={
+        'URI': '{{ var.value.URI }}',
+    }
     dag=dag,
 )
