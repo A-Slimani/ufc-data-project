@@ -31,3 +31,6 @@ Saving table space / size with enums
     - The stances are `Switch, Orthodox, Open Stance, Southpaw, Sideways, EmptyString???`
 - Script used to convert the column into an enum
 - After converting the stance to enums the table is now 
+
+## Issues and resolutions
+- Issue with not having a tmp folder when running scrapy with airflow??
