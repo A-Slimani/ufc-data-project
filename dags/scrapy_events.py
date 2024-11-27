@@ -33,6 +33,6 @@ scrape_events = DockerOperator(
     network_mode="ufc-data-project_default",    
     environment={
         'URI': '{{ var.value.URI }}',
-    }
+    },
     dag=dag,
 )
