@@ -30,5 +30,8 @@ scrape_fighters = DockerOperator(
     command='scrapy crawl fighters',
     docker_url="unix://var/run/docker.sock",
     network_mode="ufc-data-project_default",    
+    environments={
+        'URI': '{{ var.value.URI }}',
+    }
     dag=dag,
 )
