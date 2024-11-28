@@ -15,7 +15,7 @@ dag = DAG(
     'scrapy_events',
     default_args=default_args,
     description='Scrape UFC events',
-    schedule_interval='@weekly',
+    schedule_interval=None,  # Disable automatic scheduling
     start_date=datetime.datetime(2024, 1, 1),
     catchup=False,
     tags=['scrapy'],
