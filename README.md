@@ -6,6 +6,8 @@ Practice project for data engineering.
     - Percentages wins / losses etc.
     - most amount of x wins e.g. submissions 
 - Display the data with a visualisation tool e.g. Power BI
+- Fix so that dbt can run on airflow (currently cant)
+- Change fighters columns from (first, last) name to just one column
 
 ### Low Priority
 - Include other information for fighters (will need to scrape other websites)
@@ -31,7 +33,6 @@ Saving table space / size with enums
 - Check the all the distinct stances with command `SELECT DISTINCT(stance) FROM fighters;`
     - The stances are `Switch, Orthodox, Open Stance, Southpaw, Sideways, EmptyString???`
 - Script used to convert the column into an enum
-- After converting the stance to enums the table is now 
 
 ## Issues and resolutions
 - Issue with not having a tmp folder when running scrapy with airflow

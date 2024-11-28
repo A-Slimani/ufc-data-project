@@ -9,10 +9,7 @@ SELECT
     {{ generate_total_fights('wins', 'losses', 'draws') }} AS total_fights,
     wins,
     losses,
-    draws
+    draws,
+    {{ generate_wins_by_dec('method') }}
 FROM 
     {{ source('ufcdb', 'fighters') }}
-LEFT JOIN 
-    {{ source('ufcdb', 'fights') }}
-ON
-    fighter

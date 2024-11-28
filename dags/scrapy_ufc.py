@@ -9,8 +9,6 @@ default_args = {
     'depends_on_past': False,
     'email_on_failure': False,
     'email_on_retry': False,
-    'retries': 1,
-    'retry_delay': datetime.timedelta(minutes=1),
 }
 
 dag = DAG(
@@ -36,3 +34,33 @@ scrape_events = DockerOperator(
     },
     dag=dag,
 )
+
+scrape_fighters = DockerOperator(
+    task_id='scrape_fighters',
+    image='ufc-data-project-scrapy',
+    api_version='auto',
+    auto_remove=True,
+    command='scrapy crawl fighters',
+    docker_url="unix://var/run/docker.sock",
+    network_mode="ufc-data-project_default",    
+    environment={
+        'URI': '{{ var.value.URI }}',
+    },
+    dag=dag,
+)
+
+scrape_fights = DockerOperator(
+    task_id='scrape_fights',
+    image='ufc-data-project-scrapy',
+    api_version='auto',
+    auto_remove=True,
+    command='scrapy crawl fights',
+    docker_url="unix://var/run/docker.sock",
+    network_mode="ufc-data-project_default",    
+    environment={
+        'URI': '{{ var.value.URI }}',
+    },
+    dag=dag,
+)
+
+scrape_events >> scrape_fighters >> scrape_fights
