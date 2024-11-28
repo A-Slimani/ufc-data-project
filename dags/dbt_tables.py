@@ -34,7 +34,7 @@ scrape_events = DockerOperator(
     mounts=[
         Mount(
             target='/dbt',
-            source='/home/aboud/programming/ufc-data-project/ufc-dbt',
+            source='/home/aboud/shared/programming/ufc-data-project/ufc-dbt',
             type='bind',
         ),
         Mount(
