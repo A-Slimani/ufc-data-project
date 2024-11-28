@@ -44,5 +44,6 @@ scrape_events = DockerOperator(
         )
     ],
     mount_tmp_dir=False,
+    extra_hosts={'host.docker.internal': 'host-gateway'},
     dag=dag,
 )
