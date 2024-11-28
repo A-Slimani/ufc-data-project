@@ -23,6 +23,7 @@ Practice project for data engineering.
     - include a weight class column
 - remove fighters who havent fought in the ufc
     - For some reason they are in the ufcstats fighters db
+- reorganise the dag so that it can be run by clicking one
 
 ## Notes
 Saving table space / size with enums
@@ -34,3 +35,6 @@ Saving table space / size with enums
 
 ## Issues and resolutions
 - Issue with not having a tmp folder when running scrapy with airflow??
+    - Resolved by including the line `environment={'URI':'{{ var.value.URI}}'}` in the docker operator task
+    - Add the db uri link in the admin -> variables headers
+
