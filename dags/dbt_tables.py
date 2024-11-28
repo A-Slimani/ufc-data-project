@@ -43,5 +43,6 @@ scrape_events = DockerOperator(
             type='bind',
         )
     ],
+    mount_tmp_dir=False,
     dag=dag,
 )
