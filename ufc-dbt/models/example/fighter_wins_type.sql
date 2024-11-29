@@ -8,4 +8,4 @@ SELECT
 FROM
     {{ source('ufcdb', 'fights') }}
 GROUP BY 
-    {{ r_fighter }}
+    r_fighter 
