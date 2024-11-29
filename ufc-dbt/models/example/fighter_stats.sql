@@ -10,11 +10,11 @@ SELECT
     f1.wins,
     f1.losses,
     f1.draws,
-    CASE WHEN f2.total_wins_in_ufc_by_dec IS NOT NULL THEN f2.total_wins_in_ufc_by_unanimous_dec ELSE 0 END, 
-    CASE WHEN f2.total_wins_in_ufc_by_unanimous_dec IS NOT NULL THEN f2.total_wins_in_ufc_by_unanimous_dec ELSE 0 END, 
-    CASE WHEN f2.total_wins_in_ufc_by_split_dec IS NOT NULL THEN f2.total_wins_in_ufc_by_split_dec ELSE 0 END, 
-    CASE WHEN f2.total_wins_in_ufc_by_ko_tko IS NOT NULL THEN f2.total_wins_in_ufc_by_ko_tko ELSE 0 END, 
-    CASE WHEN f2.total_wins_in_ufc_by_sub IS NOT NULL THEN f2.total_wins_in_ufc_by_sub ELSE 0 END 
+    COALESCE(f2.total_wins_in_ufc_by_dec, 0) AS total_wins_in_ufc_by_dec, 
+    COALESCE(f2.total_wins_in_ufc_by_unanimous_dec, 0) AS total_wins_in_ufc_by_unanimous_dec, 
+    COALESCE(f2.total_wins_in_ufc_by_split_dec, 0) AS total_wins_in_ufc_by_split_dec, 
+    COALESCE(f2.total_wins_in_ufc_by_ko_tko, 0) AS total_wins_in_ufc_by_ko_tko, 
+    COALESCE(f2.total_wins_in_ufc_by_sub, 0) AS total_wins_in_ufc_by_sub
 FROM 
     {{ source('ufcdb', 'fighters') }} f1
 LEFT JOIN 
