@@ -1,4 +1,3 @@
-{% macro generate_wins_by_type() %}
 SELECT
     r_fighter,
     COUNT(CASE WHEN method IN ('U-DEC', 'S-DEC') THEN 1 END) as total_wins_by_dec,
@@ -10,4 +9,3 @@ FROM
     {{ source('ufcdb', 'fights') }}
 GROUP BY 
     {{ r_fighter }}
-{% endmacro %}

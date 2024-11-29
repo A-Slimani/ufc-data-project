@@ -18,6 +18,6 @@ SELECT
 FROM 
     {{ source('ufcdb', 'fighters') }} f1
 LEFT JOIN 
-    {{ generate_wins_by_type() }} f2
+    {{ ref('fighter_wins_type') }} f2
 ON 
     (f1.first_name || ' ' || f1.last_name) = f2.r_fighter
