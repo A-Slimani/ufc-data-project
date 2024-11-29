@@ -10,6 +10,10 @@ SELECT
     wins,
     losses,
     draws,
-    {{ generate_wins_by_dec('method') }}
+    {{ generate_wins_by_type('method') }}
 FROM 
-    {{ source('ufcdb', 'fighters') }}
+    {{ source('ufcdb', 'fighters') }} f1
+LEFT JOIN
+    {{ source('ufcdb', 'fights') }} f2
+ON
+    (f1.first_name || ' ' || f1.last_name) = f2.r_fighter
