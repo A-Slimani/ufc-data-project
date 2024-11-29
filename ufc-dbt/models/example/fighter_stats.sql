@@ -18,4 +18,4 @@ LEFT JOIN
 ON
     (f1.first_name || ' ' || f1.last_name) = f2.r_fighter
 GROUP BY
-    f1.r_fighter
+    f2.r_fighter
