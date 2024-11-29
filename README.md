@@ -2,12 +2,9 @@
 Practice project for data engineering. 
 
 ## Todo
-- Calculate more statistics
-    - Percentages wins / losses etc.
-    - most amount of x wins e.g. submissions 
 - Display the data with a visualisation tool e.g. Power BI
 - Fix so that dbt can run on airflow (currently cant)
-- Learn unions
+- Change the scraper to update existing record instead of skipping them
 
 ### Low Priority
 - Include other information for fighters (will need to scrape other websites)
