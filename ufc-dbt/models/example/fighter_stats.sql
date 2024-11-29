@@ -1,5 +1,5 @@
 SELECT 
-    f2.fighter,
+    f2.r_fighter,
     weight,
     {{ generate_weight_classes('weight') }} AS weight_class,
     height,
