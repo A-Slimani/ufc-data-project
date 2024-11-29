@@ -24,8 +24,6 @@ class FightersSpider(scrapy.Spider):
                 fighter = FighterItem()
                 fighter['first_name'] = cells[0].css("a::text").get()
                 fighter['last_name'] = cells[1].css("a::text").get()
-                fighter['full_name'] = fighter['first_name'] + ' ' + fighter['last_name']
-                fighter['name'] = cells[0].css("a::text").get() + ' ' + cells[1].css("a::text").get()
                 fighter['nickname'] = None if cells[2].css("a::text").get() == ''  else cells[2].css("a::text").get()
                 fighter['height'] = None if cells[3].css("::text").get().replace('\n', '').strip() == '--' else cells[3].css("::text").get().replace('\n', '').strip()
                 fighter['weight'] = None if cells[4].css("::text").get().replace('\n', '').strip() == '--' else cells[4].css("::text").get().replace('\n', '').strip()

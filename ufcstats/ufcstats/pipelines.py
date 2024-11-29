@@ -31,7 +31,7 @@ class fighter_pipeline:
 
         # Check if fighter already exists
         try:
-            existing_fighter = session.query(Fighter).filter_by(first_name=fighter.name).first()
+            existing_fighter = session.query(Fighter).filter_by(first_name=fighter.first_name, last_name=fighter.last_name).first()
             if existing_fighter:
                 session.close()
 

@@ -7,6 +7,7 @@ Practice project for data engineering.
     - most amount of x wins e.g. submissions 
 - Display the data with a visualisation tool e.g. Power BI
 - Change fighters columns from (first, last) name to just one column
+    - Write a sql script for it
 - Fix so that dbt can run on airflow (currently cant)
 
 ### Low Priority

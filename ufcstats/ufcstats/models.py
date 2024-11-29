@@ -14,7 +14,6 @@ class Fighter(Base):
     id = Column(Integer, primary_key=True, autoincrement=True)
     first_name = Column(String, nullable=False)
     last_name = Column(String, nullable=False)
-    full_name = Column(String, nullable=False)
     nickname = Column(String, nullable=True)
     weight = Column(String, nullable=True)
     height = Column(String, nullable=True)

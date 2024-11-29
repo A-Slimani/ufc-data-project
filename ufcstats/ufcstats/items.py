@@ -14,7 +14,6 @@ class UfcstatsItem(scrapy.Item):
 class FighterItem(scrapy.Item):
     first_name = scrapy.Field()
     last_name = scrapy.Field()
-    full_name = scrapy.Field()
     nickname = scrapy.Field()
     height = scrapy.Field()
     weight = scrapy.Field()
