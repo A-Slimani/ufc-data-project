@@ -9,7 +9,7 @@ SELECT
     {{ generate_total_fights('wins', 'losses', 'draws') }} AS total_fights,
     wins,
     losses,
-    draws,
+    draws
 FROM 
     {{ source('ufcdb', 'fighters') }} f1
 LEFT JOIN 
