@@ -10,6 +10,7 @@ SELECT
     f1.wins,
     f1.losses,
     f1.draws,
+    COALESCE(f2.total_wins_in_ufc, 0) AS total_wins_in_ufc,
     COALESCE(f2.total_wins_in_ufc_by_dec, 0) AS total_wins_in_ufc_by_dec, 
     COALESCE(f2.total_wins_in_ufc_by_unanimous_dec, 0) AS total_wins_in_ufc_by_unanimous_dec, 
     COALESCE(f2.total_wins_in_ufc_by_split_dec, 0) AS total_wins_in_ufc_by_split_dec, 
