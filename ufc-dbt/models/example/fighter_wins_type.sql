@@ -1,5 +1,6 @@
 SELECT
     r_fighter,
+    COUNT(CASE WHEN method IN ('KO/TKO', 'SUB', 'U-DEC', 'S-DEC') THEN 1 END) AS total_wins_in_ufc,
     COUNT(CASE WHEN method IN ('U-DEC', 'S-DEC') THEN 1 END) AS total_wins_in_ufc_by_dec,
     COUNT(CASE WHEN method  = 'U-DEC' THEN 1 END) AS total_wins_in_ufc_by_unanimous_dec,
     COUNT(CASE WHEN method  = 'S-DEC' THEN 1 END) AS total_wins_in_ufc_by_split_dec,
