@@ -3,8 +3,9 @@ Practice project for data engineering.
 
 ## Todo
 - Display the data with a visualisation tool e.g. Power BI
-- Fix so that dbt can run on airflow (currently cant)
+- Fix so that dbt can run on airflow (currently cant) 
 - Change the scraper to update existing record instead of skipping them
+    - Rewrite the scraper to use psycopg2
 
 ### Low Priority
 - Include other information for fighters (will need to scrape other websites)
@@ -37,6 +38,10 @@ Saving table space / size with enums
 Missing one ufc event?
 - Currently on a google search there is 714 events however my db only has 713
 - Try to find the missing event
+
+Change from sqlalchemy to raw sql?
+- Read online that it is faster however it doesn't feel slow right now
+- Will not make this change unless unless it is required
 
 ## Issues and resolutions
 - Issue with not having a tmp folder when running scrapy with airflow
