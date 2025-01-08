@@ -5,8 +5,8 @@ import scrapy
 
 class EventsSpider(scrapy.Spider):
     name = "events"
-    allowed_domains = ["ufcstats.com"]
-    start_urls = ["http://ufcstats.com/statistics/events/completed?page=all"] # change to all once pipeline is working
+    allowed_domains = ["www.sherdog.com"]
+    start_urls = ['https://www.sherdog.com/organizations/Ultimate-Fighting-Championship-UFC-2']
 
     custom_settings = {
         'ITEM_PIPELINES': {
@@ -15,27 +15,20 @@ class EventsSpider(scrapy.Spider):
     }
 
     def parse(self, response):
-        table_rows = response.css("tr.b-statistics__table-row")
-        for row in table_rows:
-
-            event = EventItem()
-            name = row.css('a.b-link.b-link_style_black::text').get()
-            date = row.css('span.b-statistics__date::text').get()
-            location = row.css('td.b-statistics__table-col.b-statistics__table-col_style_big-top-padding::text').get()
-
-            if name is not None:
-                event['name'] = name.strip()
-            else:
+        event_table = response.css('table[class="new_table event"] tr[onclick]')
+        for event in event_table:
+            name = event.css('span[itemprop="name"]::text').get()
+            if 'Road to UFC' in name: # dont want no Road to UFC events
                 continue
-
-            if date is not None:
-                event['date'] = datetime.datetime.strptime(date.strip(), '%B %d, %Y').strftime('%Y-%m-%d')
-            else:
-                continue
-
-            if location is not None:
-                event['location'] = location.strip()
-            else:
-                continue
-
-            yield event
+            location = event.css('td[itemprop="location"]::text').get()
+            date = event.css('meta[itemprop="startDate"]::attr(content)').get()
+            url = event.css('a::attr(href)').get()
+            event_item = EventItem(
+                name=name,
+                date=date,
+                location=location,
+                url=url
+            )
+            yield event_item
+        for page_no in range(1, 10):
+            yield response.follow(f"https://www.sherdog.com/organizations/Ultimate-Fighting-Championship-UFC-2/recent-events/{page_no}", callback=self.parse)
