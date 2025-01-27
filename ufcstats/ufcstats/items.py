@@ -11,25 +11,33 @@ class UfcstatsItem(scrapy.Item):
     # name = scrapy.Field()
     pass
 
-class FighterItem(scrapy.Item):
+class Fighter(scrapy.Item):
     first_name = scrapy.Field()
     last_name = scrapy.Field()
+    age = scrapy.Field()
     nickname = scrapy.Field()
     height = scrapy.Field()
     weight = scrapy.Field()
     reach = scrapy.Field()
     stance = scrapy.Field()
     wins = scrapy.Field()
+    total_wins_by_ko_tko = scrapy.Field()
+    total_wins_by_submission = scrapy.Field()
+    total_wins_by_decision = scrapy.Field()
     losses = scrapy.Field()
+    total_losses_by_ko_tko = scrapy.Field()
+    total_losses_by_submission = scrapy.Field()
+    total_losses_by_decision = scrapy.Field()
     draws = scrapy.Field()
     belt = scrapy.Field()
+    sherdog_id = scrapy.Field()
 
-class EventItem(scrapy.Item):
+class Event(scrapy.Item):
     name = scrapy.Field()
     date = scrapy.Field()
     location = scrapy.Field()
 
-class FightItem(scrapy.Item):
+class Fight(scrapy.Item):
     event_name = scrapy.Field()
     r_fighter = scrapy.Field()
     l_fighter = scrapy.Field()
@@ -43,8 +51,12 @@ class FightItem(scrapy.Item):
     l_takedowns = scrapy.Field()
     r_submission_attempts = scrapy.Field()
     l_submission_attempts = scrapy.Field()
-    weight_class = scrapy.Field()
+    fight_weight = scrapy.Field()
     method = scrapy.Field()
     sub_method = scrapy.Field()
     round = scrapy.Field()
     time = scrapy.Field()
+
+class Sherdog_ID(scrapy.Item):
+    name = scrapy.Field()
+    sherdog_id = scrapy.Field()

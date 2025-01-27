@@ -1,0 +1,17 @@
+{
+    "version": "0.1.0",
+    "configurations": [
+        {
+            "name": "Python: Launch Scrapy Spider",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "scrapy",
+            "args": [
+                "crawl",
+                "${fileBasenameNoExtension}"
+            ],
+            "console": "integratedTerminal",
+            "cwd": "${workspaceFolder}/ufcstats/ufcstats"
+        }
+    ]
+}

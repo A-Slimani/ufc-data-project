@@ -1,11 +1,11 @@
-from ufcstats.items import FightItem
+from ufcstats.items import Fight
 import scrapy
 
 
 class FightsSpider(scrapy.Spider):
     name = "fights"
     allowed_domains = ["ufcstats.com"]
-    start_urls = ["http://ufcstats.com/statistics/events/completed?page=all"] # removed ?page=all 
+    start_urls = ["http://ufcstats.com/statistics/events/completed?page=all"] 
 
     custom_settings = {
         'ITEM_PIPELINES': {
@@ -22,11 +22,11 @@ class FightsSpider(scrapy.Spider):
         rows = response.css("tr.b-fight-details__table-row.b-fight-details__table-row__hover.js-fight-details-click")
         event_name = response.css("span.b-content__title-highlight::text").get().strip().replace('\n', '') 
         for row in rows:
-            fight = FightItem()
+            fight = Fight()
             fight['event_name'] = event_name
             names = [name.strip().replace('\n', '') for name in row.css("a.b-link.b-link_style_black::text").getall()]
-            fight['r_fighter']= names[0]
-            fight['l_fighter']= names[1]
+            fight['r_fighter'] = names[0]
+            fight['l_fighter'] = names[1]
 
             data = [d.strip().replace('\n', '') for d in row.css("p.b-fight-details__table-text::text").getall()]
             data = [d for d in data if d != '']
