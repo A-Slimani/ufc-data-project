@@ -2,7 +2,7 @@
 Practice project for data engineering. Scraping ufc data from sherdog and ufcstats
 
 **How to run the data pipelines**
-- Start
+- Start by running the dockerfiles
 
 ## Todo
 - Display the data with a visualisation tool e.g. Power BI
@@ -11,7 +11,7 @@ Practice project for data engineering. Scraping ufc data from sherdog and ufcsta
     - Rewrite the scraper to use psycopg2
 
 ### Low Priority
-- Include other information for fighters (will need to scrape other websites)
+- Include other information for fighters (will scrape from sherdog)
     - Nationality
     - Location
     - Gender
