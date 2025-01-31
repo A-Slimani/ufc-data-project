@@ -1,6 +1,6 @@
 import datetime
 from airflow import DAG
-from airflow.operator.docker_operator import DockerOperator
+from airflow.operators.docker_operator import DockerOperator
 from airflow.operators.empty import EmptyOperator
 
 default_args = {
