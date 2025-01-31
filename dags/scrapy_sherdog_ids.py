@@ -33,3 +33,5 @@ get_sherdog_ids = DockerOperator(
     },
     dag=dag,
 )
+
+get_sherdog_ids
