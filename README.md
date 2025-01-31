@@ -1,5 +1,8 @@
 # UFC Data Project
-Practice project for data engineering. 
+Practice project for data engineering. Scraping ufc data from sherdog and ufcstats
+
+**How to run the data pipelines**
+- Start
 
 ## Todo
 - Display the data with a visualisation tool e.g. Power BI
