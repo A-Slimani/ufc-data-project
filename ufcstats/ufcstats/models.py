@@ -22,11 +22,13 @@ class Fighter(Base):
     height = Column(String, nullable=True)
     reach = Column(Integer, nullable=True)
     stance = Column(String, nullable=True)
-    wins = Column(Integer, nullable=False)
-    losses = Column(Integer, nullable=False)
-    draws = Column(Integer, nullable=False)
-    belt = Column(Boolean, nullable=False)
-    sherdog_id = Column(String, nullable=False)
+    wins = Column(Integer, nullable=True)
+    losses = Column(Integer, nullable=True)
+    draws = Column(Integer, nullable=True)
+    belt = Column(Boolean, nullable=True)
+    sherdog_id = Column(String, nullable=True)
+    nationality = Column(String, nullable=True)
+    locality = Column(String, nullable=True)
 
     __table_args__ = (UniqueConstraint('first_name', 'last_name', name='fighter_unique_constraint'),)
 

@@ -8,8 +8,8 @@ from scrapy import Spider
 class TestSpider(Spider):
     name = "sherdog_fighter"
     allowed_domains = ["www.sherdog.com"]
-    start_urls = ["https://www.sherdog.com/sitemap-fighters.xml"]
-    page_number = 1   
+    page_number = 1 
+    start_urls = [f"https://www.sherdog.com/sitemap-fighters{page_number}.xml"]
 
     custom_settings = {
         "ITEM_PIPELINES": {"ufcstats.pipelines.sherdog_id_pipeline": 600}
@@ -18,10 +18,10 @@ class TestSpider(Spider):
     def parse(self, response):
         selector = Selector(text=response.text)
 
-        if selector == '':
+        urls = selector.xpath("//url/loc/text()").extract()
+        if urls == []: 
             raise CloseSpider('No more products to scrape')
 
-        urls = selector.xpath("//url/loc/text()").extract()
         for url in urls:
             item = Sherdog_ID()
             name = url.split("/")[-1].split("-")[:-1]

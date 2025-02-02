@@ -31,6 +31,8 @@ class Fighter(scrapy.Item):
     draws = scrapy.Field()
     belt = scrapy.Field()
     sherdog_id = scrapy.Field()
+    nationality = scrapy.Field()
+    locality = scrapy.Field()
 
 class Event(scrapy.Item):
     name = scrapy.Field()
@@ -51,7 +53,7 @@ class Fight(scrapy.Item):
     l_takedowns = scrapy.Field()
     r_submission_attempts = scrapy.Field()
     l_submission_attempts = scrapy.Field()
-    fight_weight = scrapy.Field()
+    weight_class = scrapy.Field()
     method = scrapy.Field()
     sub_method = scrapy.Field()
     round = scrapy.Field()

@@ -1,7 +1,9 @@
-from ufcstats.items import Fighter, Sherdog_ID
+from ufcstats.items import Fighter
+from ufcstats.models import SherdogIds
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.exc import SQLAlchemyError
+import psycopg2
 import scrapy
 import string
 import os
@@ -15,7 +17,11 @@ class FightersSpider(scrapy.Spider):
         for char in string.ascii_lowercase
     ]
 
-    custom_settings = {"ITEM_PIPELINES": {"ufcstats.pipelines.fighter_pipeline": 300}}
+    custom_settings = {
+        "ITEM_PIPELINES": {"ufcstats.pipelines.fighter_pipeline": 300},
+        "DUPEFILTER_CLASS": "scrapy.dupefilters.BaseDupeFilter",
+    }
+
 
     def data_strip(self, data, type):
         if type == str:
@@ -71,46 +77,42 @@ class FightersSpider(scrapy.Spider):
                     if cells[10].css("::text").get().replace("\n", "").strip() == ""
                     else True
                 )
-                # In order to follow I need to get the link to the fighters page on sherdog
-                # 2 paths
-                # 1. Have a table that has all the sherdog links
-                # 2. If not run the sherdog.xml scraper to update and get the new name
-                # Make a SQL request to get the fighter name based of the table
                 try:
                     uri = os.getenv("URI")
-                    if uri is None:
-                        raise ValueError(
-                            "Database URI is not set in environment variables"
+                    conn = psycopg2.connect(uri)
+                    cursor = conn.cursor()
+                    cursor.execute(
+                        f"SELECT * FROM sherdog_ids WHERE name = '{fighter['first_name']} {fighter['last_name']}'"
+                    )
+                    matching_fighter = cursor.fetchone()
+                    if matching_fighter is not None:
+                        fighter["sherdog_id"] = matching_fighter[2]
+                        yield response.follow(
+                            f"https://www.sherdog.com/fighter/{matching_fighter[2]}",
+                            callback=self.parse_sherdog,
+                            meta={"fighter": fighter},
+                            dont_filter=True,
                         )
-                    engine = create_engine(uri)
-                    session = sessionmaker(bind=engine)
-                    with session() as s:
-                        def get_matching_fighter():
-                            matching_fighter = (
-                                s.query(Sherdog_ID)
-                                .filter_by(
-                                    name=" ".join(
-                                        [fighter["first_name"], fighter["last_name"]]
-                                    )
-                                )
-                                .first()
-                            )
-                            if matching_fighter is not None:
-                                fighter["sherdog_id"] = matching_fighter.sherdog_id
-                            else:
-                                # Run the sherdog xml scraper again
-                                # Potential infinite loop???
-                                get_matching_fighter()
-                                pass
-
+                    else:
+                        print("No matching fighter found")
+                        yield fighter
                 except Exception as e:
                     return {"Database Error: ", e}
-
-                # yield response.follow(url=)
-                # if True:
-                #     url = 'https://www.sherdog.com/sitemap-fighters.xml'
-                # else:
-                #     yield fighter
+                finally:
+                    cursor.close()
+                    conn.close()
 
     def parse_sherdog(self, response):
-        pass
+        fighter = response.meta["fighter"]
+        fighter_data = response.css("div[class='fighter-data']")
+        age_data = fighter_data.css("div[class='bio-holder'] td b::text").get()
+        fighter["nationality"] = response.css(
+            'strong[itemprop="nationality"]::text'
+        ).get()
+        fighter["locality"] = response.css('span[class="locality"]::text').get()
+        try:
+            fighter["age"] = int(age_data)
+        except:
+            fighter["age"] = None
+
+        yield fighter
