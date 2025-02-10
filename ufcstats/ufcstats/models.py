@@ -26,11 +26,9 @@ class Fighter(Base):
     losses = Column(Integer, nullable=True)
     draws = Column(Integer, nullable=True)
     belt = Column(Boolean, nullable=True)
-    sherdog_id = Column(String, nullable=True)
+    sherdog_id = Column(String, nullable=True, unique=True)
     nationality = Column(String, nullable=True)
     locality = Column(String, nullable=True)
-
-    __table_args__ = (UniqueConstraint('first_name', 'last_name', name='fighter_unique_constraint'),)
 
 
 class Event(Base):
