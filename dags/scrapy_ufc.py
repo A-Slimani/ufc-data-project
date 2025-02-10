@@ -21,20 +21,6 @@ dag = DAG(
     tags=['scrapy'],
 )
 
-# get_sherdog_ids = DockerOperator(
-#     task_id='get_sherdog_ids',
-#     image='ufc-data-project-scrapy',
-#     api_version='auto',
-#     auto_remove=True,
-#     command='scrapy crawl sherdog_fighter',
-#     docker_url="unix://var/run/docker.sock",
-#     network_mode="ufc-data-project_default",
-#     environment={
-#         'URI': '{{ var.value.URI }}',
-#     },
-#     dag=dag,
-# )
-
 scrape_events = DockerOperator(
     task_id='scrape_events',
     image='ufc-data-project-scrapy',
@@ -54,7 +40,7 @@ scrape_fighters = DockerOperator(
     image='ufc-data-project-scrapy',
     api_version='auto',
     auto_remove=True,
-    command='scrapy crawl fighters',
+    command='scrapy crawl fighters_all',
     docker_url="unix://var/run/docker.sock",
     network_mode="ufc-data-project_default",    
     environment={
