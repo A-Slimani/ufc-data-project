@@ -17,6 +17,8 @@ services:
       retries: 5
       start_period: 5s
     restart: always
+    networks:
+      - ufc-network
 
   scrapy:
     build: 
@@ -26,6 +28,8 @@ services:
       - ufc-db 
     volumes:
       - .:/app
+    networks:
+      - ufc-network
   
   airflow-db:
     image: postgres:17.2
@@ -41,6 +45,8 @@ services:
       retries: 5
       start_period: 5s
     restart: always
+    networks:
+      - ufc-network
   
   init-airflow:
     image: apache/airflow:2.10.3
@@ -76,6 +82,8 @@ services:
       retries: 5
     restart: always
     command: airflow webserver
+    networks:
+      - ufc-network
   
   scheduler:
     build: 
@@ -96,6 +104,8 @@ services:
       AIRFLOW__WEBSERVER__SECRET_KEY: "369e0e13a5ee7a7ebd3c51dfe3108c5c1ac8a0b01286ff0969eaaf726dd0d66f"
     restart: always
     command: airflow scheduler
+    networks:
+      - ufc-network
   
   dbt:
     image: ghcr.io/dbt-labs/dbt-postgres:1.8.2
@@ -109,7 +119,12 @@ services:
         condition: service_healthy 
     environment:
       - DBT_PROFILES_DIR=/root/.dbt
-  
+    networks:
+      - ufc-network
+
+networks:
+  ufc-network:
+    driver: bridge
 
 volumes:
   ufc-data:

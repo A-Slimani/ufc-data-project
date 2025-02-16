@@ -13,4 +13,5 @@ COPY . .
 
 WORKDIR /app/ufcstats
 
+# this so I can read the output of the container before it sleeps
 CMD ["sleep", "300"]
