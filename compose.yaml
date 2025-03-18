@@ -1,8 +1,8 @@
 services:
-  data-eng-db:
+  ufc-db:
     image: postgres:17.4
-    container_name: data-eng-db
-    envirnoment:
+    container_name: ufc-db 
+    environment:
       POSTGRES_USER: ufc
       POSTGRES_PASSWORD: ufc 
       POSTGRES_DB: ufcdb
