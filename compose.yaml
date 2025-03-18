@@ -1,0 +1,15 @@
+services:
+  data-eng-db:
+    image: postgres:17.4
+    container_name: data-eng-db
+    envirnoment:
+      POSTGRES_USER: ufc
+      POSTGRES_PASSWORD: ufc 
+      POSTGRES_DB: ufcdb
+    ports:
+      - "5432:5432"
+    volumes:
+      - ufcdb_data:/var/lib/postgresql/data
+
+volumes:
+  ufcdb_data:
