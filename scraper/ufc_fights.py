@@ -9,16 +9,17 @@ import os
 logging.basicConfig(
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
     handlers=[logging.FileHandler("ufc_fights.log"), logging.StreamHandler()],
-    level=logging.ERROR
+    level=logging.DEBUG
 )
 
 hisel_logger = logging.getLogger("hishel") 
 
 logger = logging.getLogger(__name__)
 
-async def get_fight_data(page, semaphore, pool):
+async def get_fight_data(page, semaphore, pool, sleep_time):
   async with semaphore:
     try:
+      await asyncio.sleep(sleep_time)
       url = f"https://d29dxerjsp82wz.cloudfront.net/api/v3/fight/live/{page}.json"
       async with hishel.AsyncCacheClient(
         storage=hishel.AsyncFileStorage(base_path="./.cache/ufc_fights/", ttl=3600 * 24),
@@ -128,7 +129,7 @@ async def main():
   )
 
   semaphore = asyncio.Semaphore(16)
-  tasks = [get_fight_data(i, semaphore, pool) for i in range(30, 11500)]
+  tasks = [get_fight_data(i, semaphore, pool, 1) for i in range(30, 11500)]
   await asyncio.gather(*tasks)
 
 if __name__ == '__main__':

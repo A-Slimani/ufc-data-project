@@ -10,18 +10,15 @@ logging.basicConfig(
     handlers=[logging.FileHandler('ufc_fighters.log'), logging.StreamHandler()],
     level=logging.DEBUG,
 )
-
 hishel_logger = logging.getLogger("hishel")
-httpx_logger = logging.getLogger("httpx")
-hishel_logger.setLevel(logging.DEBUG)
-httpx_logger.setLevel(logging.DEBUG)
-
 logger = logging.getLogger(__name__)
 
 
-async def get_fighter_data(page, semaphore, pool): 
+async def get_data(page, semaphore, pool, sleep_time): 
   async with semaphore:
     try:
+      await asyncio.sleep(sleep_time)
+
       async with hishel.AsyncCacheClient(
         storage=hishel.AsyncFileStorage(base_path="./.cache/ufc_events/", ttl=3600 * 24),
         verify=False,
@@ -42,6 +39,39 @@ async def get_fighter_data(page, semaphore, pool):
         event_details = json_data["LiveEventDetail"]          
 
         if event_details:
+          event_data = {
+            "id": event_details["EventId"],
+            "name": event_details["Name"],
+            "date": event_details["StartTime"],
+            "city": event_details["Location"]["City"],
+            "state": event_details["Location"]["State"],
+            "country": event_details["Location"]["Country"],
+            "venue": event_details["Location"]["Venue"],
+          }
+          async with pool.acquire() as conn:
+            await conn.execute(
+            """
+            INSERT INTO events (id, name, date, city, state, country, venue, last_updated_at)
+            VALUES ($1, $2, $3, $4, $5, $6, $7, CURRENT_TIMESTAMP)
+            ON CONFLICT (id) DO UPDATE SET
+              id = EXCLUDED.id,
+              name = EXCLUDED.name,
+              date = EXCLUDED.date,
+              city = EXCLUDED.city,
+              state = EXCLUDED.state,
+              country = EXCLUDED.country,
+              venue = EXCLUDED.venue,
+              last_updated_at = CURRENT_TIMESTAMP
+            """,
+            event_data["id"],
+            event_data["name"],
+            event_data["date"],
+            event_data["city"],
+            event_data["state"],
+            event_data["country"],
+            event_data["venue"],
+            )
+
           for fight in event_details["FightCard"]: 
             for fighter in fight["Fighters"]:
               fighter_data = {
@@ -123,6 +153,7 @@ async def get_fighter_data(page, semaphore, pool):
                   fighter_data["weight_class"],
                   fighter_data["url"],
                 )
+                conn.close()
         else:
           logger.info(f"No data found for page {page}")
           pass
@@ -130,41 +161,59 @@ async def get_fighter_data(page, semaphore, pool):
     except Exception as e:
       logger.error(f"Error fetching data for page {page}: {str(e)}") 
       raise
+
+def create_event_table():
+  conn = psycopg2.connect(os.getenv("DB_URI"))
+  with conn.cursor() as cursor:
+    cursor.execute(
+    """
+    CREATE TABLE IF NOT EXISTS events (
+      id INTEGER PRIMARY KEY, 
+      name TEXT,
+      date TEXT,
+      city TEXT,
+      state TEXT,
+      country TEXT,
+      venue TEXT,
+      last_updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL
+    ) 
+    """
+    )
+    conn.commit()
     
 def create_fighter_table():
   conn = psycopg2.connect(os.getenv("DB_URI")) 
-  cursor = conn.cursor()
-  cursor.execute(
-    """
-    CREATE TABLE IF NOT EXISTS fighters (
-      id INTEGER PRIMARY KEY,
-      first_name TEXT,
-      last_name TEXT,
-      nickname TEXT,
-      hometown_city TEXT,
-      hometown_state TEXT,
-      hometown_country TEXT,
-      trains_at_city TEXT,
-      trains_at_state TEXT,
-      trains_at_country TEXT,
-      wins INTEGER,
-      losses INTEGER,
-      draws INTEGER,
-      age INTEGER,
-      height INTEGER,
-      stance TEXT,
-      reach INTEGER,
-      weight_class INTEGER, 
-      url TEXT,
-      last_updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL
+  with conn.cursor() as cursor:
+    cursor.execute(
+      """
+      CREATE TABLE IF NOT EXISTS fighters (
+        id INTEGER PRIMARY KEY,
+        first_name TEXT,
+        last_name TEXT,
+        nickname TEXT,
+        hometown_city TEXT,
+        hometown_state TEXT,
+        hometown_country TEXT,
+        trains_at_city TEXT,
+        trains_at_state TEXT,
+        trains_at_country TEXT,
+        wins INTEGER,
+        losses INTEGER,
+        draws INTEGER,
+        age INTEGER,
+        height INTEGER,
+        stance TEXT,
+        reach INTEGER,
+        weight_class INTEGER, 
+        url TEXT,
+        last_updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL
+      )
+      """
     )
-    """
-  )
-  conn.commit()
-  cursor.close()
-  conn.close()
+    conn.commit()
 
 async def main():
+  create_event_table()
   create_fighter_table()
 
   pool = await asyncpg.create_pool(
@@ -174,7 +223,7 @@ async def main():
   )
 
   semaphore = asyncio.Semaphore(16)
-  tasks = [get_fighter_data(i, semaphore, pool) for i in range(1, 1300)]
+  tasks = [get_data(i, semaphore, pool, 1) for i in range(1, 1300)]
   await asyncio.gather(*tasks)
 
 if __name__ == '__main__':

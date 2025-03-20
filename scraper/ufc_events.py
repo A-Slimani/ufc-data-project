@@ -11,14 +11,10 @@ logging.basicConfig(
     handlers=[logging.FileHandler("ufc_events.log"), logging.StreamHandler()],
     level=logging.DEBUG 
 )
-
 hishel_logger = logging.getLogger("hishel")
-httpx_logger = logging.getLogger("httpx")
-
 logger = logging.getLogger(__name__)
 
-
-async def get_event_data(page, semaphore, pool):
+async def get_event_data(page, semaphore, pool, delay):
     async with semaphore:
         try:
             storage = hishel.AsyncFileStorage(base_path="./.cache/ufc_events/", ttl=3600 * 24)
@@ -81,6 +77,8 @@ async def get_event_data(page, semaphore, pool):
                 logger.info(f"No data found for page {page}")
                 pass
 
+            await asyncio.sleep(delay)
+
         except Exception as e:
             logger.error(f"Error fetching data for page {page}: {str(e)}")
             raise
@@ -117,7 +115,7 @@ async def main():
     )
 
     semaphore = asyncio.Semaphore(32)
-    tasks = [get_event_data(i, semaphore, pool) for i in range(1, 1300)] 
+    tasks = [get_event_data(i, semaphore, pool, 1) for i in range(1, 1300)] 
     await asyncio.gather(*tasks)
 
 
