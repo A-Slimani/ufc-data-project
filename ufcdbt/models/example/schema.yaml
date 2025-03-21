@@ -1,0 +1,27 @@
+
+version: 2
+
+models:
+  - name: events
+    description: table of ufc events
+    columns:
+      - name: id
+        description: "Primary key for this table"
+        data_tests:
+          - unique
+          - not_null
+      - name: date 
+        description: "date of the event"
+        data_tests:
+          - not_null
+      - name: city 
+        description: "city where event was held"
+      - name: state 
+        description: "state where event was held"
+      - name: country 
+        description: "country where event was held"
+      - name: venue
+        description: "venue where event was held"
+        
+
+      
