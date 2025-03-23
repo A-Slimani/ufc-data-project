@@ -83,6 +83,21 @@ services:
       AIRFLOW__WEBSERVER__SECRET_KEY: "skibidi"
     restart: always
     command: airflow scheduler
+  
+  apache-superset:
+    image: apache/superset
+    user: root
+    environment:
+      - SUPERSET_SECRET_KEY=skibidi
+      - POSTGRES_DB=superset
+      - POSTGRES_USER=superset
+      - POSTGRES_PASSWORD=superset
+    ports:
+      - "8088:8088"
+    volumes:
+      - ./superset_home:/app/superset_home
+    depends_on:
+      - ufc-db
 
 
 
