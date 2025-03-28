@@ -9,7 +9,7 @@ import os
 logging.basicConfig(
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
     handlers=[logging.FileHandler("ufc_fights.log"), logging.StreamHandler()],
-    level=logging.DEBUG
+    level=logging.INFO
 )
 
 hisel_logger = logging.getLogger("hishel") 
@@ -59,7 +59,7 @@ async def get_fight_data(page, semaphore, pool, sleep_time):
           async with pool.acquire() as conn:
             await conn.execute(
               """
-              INSERT INTO fights (
+              INSERT INTO raw_fights (
                 id, event_id, r_fighter_id, b_fighter_id, 
                 r_fighter_status, b_fighter_status, round, time, 
                 method, bout_weight, r_fight_stats, b_fight_stats, url, last_updated_at
@@ -97,12 +97,12 @@ def create_fight_table():
   cursor = conn.cursor()
   cursor.execute(
   """
-  CREATE TABLE IF NOT EXISTS fights (
+  CREATE TABLE IF NOT EXISTS raw_fights (
     id INTEGER PRIMARY KEY,
-    event_id INTEGER REFERENCES events(id) ON DELETE CASCADE,
-    r_fighter_id INTEGER REFERENCES fighters(id) ON DELETE CASCADE,
+    event_id INTEGER REFERENCES raw_events(id) ON DELETE CASCADE,
+    r_fighter_id INTEGER REFERENCES raw_fighters(id) ON DELETE CASCADE,
     r_fighter_status TEXT,
-    b_fighter_id INTEGER REFERENCES fighters(id) ON DELETE CASCADE,
+    b_fighter_id INTEGER REFERENCES raw_fighters(id) ON DELETE CASCADE,
     b_fighter_status TEXT,
     round INTEGER,
     time TEXT,

@@ -8,7 +8,7 @@ import os
 logging.basicConfig(
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
     handlers=[logging.FileHandler('ufc_fighters.log'), logging.StreamHandler()],
-    level=logging.DEBUG,
+    level=logging.INFO,
 )
 hishel_logger = logging.getLogger("hishel")
 logger = logging.getLogger(__name__)
@@ -51,7 +51,7 @@ async def get_data(page, semaphore, pool, sleep_time):
           async with pool.acquire() as conn:
             await conn.execute(
             """
-            INSERT INTO events (id, name, date, city, state, country, venue, last_updated_at)
+            INSERT INTO raw_events (id, name, date, city, state, country, venue, last_updated_at)
             VALUES ($1, $2, $3, $4, $5, $6, $7, CURRENT_TIMESTAMP)
             ON CONFLICT (id) DO UPDATE SET
               id = EXCLUDED.id,
@@ -92,19 +92,19 @@ async def get_data(page, semaphore, pool, sleep_time):
                 "height": fighter["Height"],
                 "stance": fighter["Stance"],
                 "reach": fighter["Reach"],
-                "weight_class": fighter["Weight"],
+                "weight": fighter["Weight"],
                 "url": fighter["UFCLink"],
               }
         
               async with pool.acquire() as conn:
                 await conn.execute(
                   """
-                  INSERT INTO fighters (
+                  INSERT INTO raw_fighters (
                     id, first_name, last_name, 
                     nickname, hometown_city, hometown_state, 
                     hometown_country, trains_at_city, trains_at_state, 
                     trains_at_country, wins, losses, draws, age, height, 
-                    stance, reach, weight_class, url, last_updated_at
+                    stance, reach, weight, url, last_updated_at
                   ) VALUES (
                     $1, $2, $3, $4, $5, 
                     $6, $7, $8, $9, $10, 
@@ -129,7 +129,7 @@ async def get_data(page, semaphore, pool, sleep_time):
                     height = EXCLUDED.height,
                     stance = EXCLUDED.stance,
                     reach = EXCLUDED.reach,
-                    weight_class = EXCLUDED.weight_class,
+                    weight = EXCLUDED.weight,
                     url = EXCLUDED.url,
                     last_updated_at = CURRENT_TIMESTAMP
                   """,
@@ -150,7 +150,7 @@ async def get_data(page, semaphore, pool, sleep_time):
                   fighter_data["height"],
                   fighter_data["stance"],
                   fighter_data["reach"],
-                  fighter_data["weight_class"],
+                  fighter_data["weight"],
                   fighter_data["url"],
                 )
                 conn.close()
@@ -167,7 +167,7 @@ def create_event_table():
   with conn.cursor() as cursor:
     cursor.execute(
     """
-    CREATE TABLE IF NOT EXISTS events (
+    CREATE TABLE IF NOT EXISTS raw_events (
       id INTEGER PRIMARY KEY, 
       name TEXT,
       date TEXT,
@@ -186,7 +186,7 @@ def create_fighter_table():
   with conn.cursor() as cursor:
     cursor.execute(
       """
-      CREATE TABLE IF NOT EXISTS fighters (
+      CREATE TABLE IF NOT EXISTS raw_fighters (
         id INTEGER PRIMARY KEY,
         first_name TEXT,
         last_name TEXT,
@@ -204,7 +204,7 @@ def create_fighter_table():
         height INTEGER,
         stance TEXT,
         reach INTEGER,
-        weight_class INTEGER, 
+        weight INTEGER, 
         url TEXT,
         last_updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL
       )

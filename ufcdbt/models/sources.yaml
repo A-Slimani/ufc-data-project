@@ -1,0 +1,12 @@
+sources:
+  - name: ufcdb
+    description: "Source of ufc data"
+    database: ufcdb
+    schema: public
+    tables:
+      - name: raw_fighters
+        description: "contains raw fighter data from ufc api"
+      - name: raw_events 
+        description: "contains raw event data from ufc api"
+      - name: raw_fights
+        description: "contains raw fight data from ufc api"

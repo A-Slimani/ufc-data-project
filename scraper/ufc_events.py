@@ -53,7 +53,7 @@ async def get_event_data(page, semaphore, pool, delay):
                 async with pool.acquire() as conn:
                     await conn.execute(
                         """
-                        INSERT INTO events (id, name, date, city, state, country, venue, last_updated_at)
+                        INSERT INTO raw_events (id, name, date, city, state, country, venue, last_updated_at)
                         VALUES ($1, $2, $3, $4, $5, $6, $7, CURRENT_TIMESTAMP)
                         ON CONFLICT (id) DO UPDATE SET
                             id = EXCLUDED.id,

@@ -2,6 +2,8 @@
 .env
 *.log
 *test.py
+*test.json
+*test.sql
 __pycache__/
 .cache/
 .DS_*
