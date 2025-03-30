@@ -1,4 +1,3 @@
--- No processing needed just doing this for standarization and practice
 SELECT
   id,
   name,
