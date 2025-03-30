@@ -46,7 +46,9 @@ async def get_data(page, semaphore, pool, sleep_time):
             "city": event_details["Location"]["City"],
             "state": event_details["Location"]["State"],
             "country": event_details["Location"]["Country"],
+            "country_tricode": event_details["Location"]["TriCode"],
             "venue": event_details["Location"]["Venue"],
+            "organisation_data": event_details["Organization"]
           }
           async with pool.acquire() as conn:
             await conn.execute(
@@ -60,7 +62,9 @@ async def get_data(page, semaphore, pool, sleep_time):
               city = EXCLUDED.city,
               state = EXCLUDED.state,
               country = EXCLUDED.country,
+              country_tricode = EXCLUDED.country_tricode,
               venue = EXCLUDED.venue,
+              organisation_data = EXCLUDED.organisation_data,
               last_updated_at = CURRENT_TIMESTAMP
             """,
             event_data["id"],
@@ -69,7 +73,9 @@ async def get_data(page, semaphore, pool, sleep_time):
             event_data["city"],
             event_data["state"],
             event_data["country"],
+            event_data["country_tricode"],
             event_data["venue"],
+            event_data["organisation_data"]
             )
 
           for fight in event_details["FightCard"]: 
@@ -174,7 +180,9 @@ def create_event_table():
       city TEXT,
       state TEXT,
       country TEXT,
+      country_tricode TEXT,
       venue TEXT,
+      organisation_data JSONB,
       last_updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL
     ) 
     """
