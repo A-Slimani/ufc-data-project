@@ -1,5 +1,5 @@
 ```mermaid
-flowchart TD 
+flowchart LR 
     subgraph build["Initial Scrape"]
         inital_db_build["Initial DB build"]
     end
