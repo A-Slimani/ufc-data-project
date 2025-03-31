@@ -1,13 +1,19 @@
+from extensions.get_missing_pages import get_missing_page_list 
 import psycopg2
 import logging
 import asyncio
 import asyncpg
+import random
 import hishel
+import json
+import sys
 import os
+
+logDir = '/Users/aboud/Programming/ufc-data-project/logs'
 
 logging.basicConfig(
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
-    handlers=[logging.FileHandler('ufc_fighters.log'), logging.StreamHandler()],
+    handlers=[logging.FileHandler(f'{logDir}/ufc_events_and_fighters.log'), logging.StreamHandler()],
     level=logging.INFO,
 )
 hishel_logger = logging.getLogger("hishel")
@@ -48,13 +54,16 @@ async def get_data(page, semaphore, pool, sleep_time):
             "country": event_details["Location"]["Country"],
             "country_tricode": event_details["Location"]["TriCode"],
             "venue": event_details["Location"]["Venue"],
-            "organisation_data": event_details["Organization"]
+            "organisation_data": json.dumps(event_details["Organization"])
           }
           async with pool.acquire() as conn:
             await conn.execute(
             """
-            INSERT INTO raw_events (id, name, date, city, state, country, venue, last_updated_at)
-            VALUES ($1, $2, $3, $4, $5, $6, $7, CURRENT_TIMESTAMP)
+            INSERT INTO raw_events (
+              id, name, date, city, state, country, 
+              country_tricode, venue, organisation_data, last_updated_at
+            )
+            VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, CURRENT_TIMESTAMP)
             ON CONFLICT (id) DO UPDATE SET
               id = EXCLUDED.id,
               name = EXCLUDED.name,
@@ -162,6 +171,8 @@ async def get_data(page, semaphore, pool, sleep_time):
                 conn.close()
         else:
           logger.info(f"No data found for page {page}")
+          with open(f'{logDir}/missing_pages.txt', 'a') as f:
+            f.write(f"{page}\n")
           pass
 
     except Exception as e:
@@ -220,7 +231,16 @@ def create_fighter_table():
     )
     conn.commit()
 
+def get_max_event():
+  conn = psycopg2.connect(os.getenv("DB_URI"))
+  with conn.cursor() as cursor:
+    cursor.execute("SELECT id FROM raw_events where date::date > CURRENT_DATE")
+    results = cursor.fetchall()
+    page_list = [page[0] for page in results]
+    return page_list 
+
 async def main():
+  get_max_event()
   create_event_table()
   create_fighter_table()
 
@@ -231,7 +251,26 @@ async def main():
   )
 
   semaphore = asyncio.Semaphore(16)
-  tasks = [get_data(i, semaphore, pool, 1) for i in range(1, 1300)]
+  if sys.argv[1] == "--partial":
+    pages = get_missing_page_list(f"{logDir}/missing_pages.txt")
+    tasks = [get_data(page, semaphore, pool, 1) for page in pages]
+
+  elif sys.argv[1] == '--recent':
+    max_pages = get_max_event()
+    pages = max_pages + [i for i in range(max(max_pages), max(max_pages) + 10)]  
+    tasks = [get_data(page, semaphore, pool, 1) for page in pages]
+
+  elif sys.argv[1] == "--full":
+    # need to update the range make it a case e.g. if no data for 10 consecutive pages exit
+    tasks = [get_data(page, semaphore, pool, 1) for page in range(1, 1300)]
+
+  elif sys.argv[1] == "--test":
+    random_pages = [random.randint(100, 900) for _ in range(20)]
+    tasks = [get_data(page, semaphore, pool, 1) for page in random_pages]
+
+  else:
+    print("Need to pass an argument: --partial, --recent, --full, --test")
+
   await asyncio.gather(*tasks)
 
 if __name__ == '__main__':

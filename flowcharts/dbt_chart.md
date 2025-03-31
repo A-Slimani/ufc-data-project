@@ -1,9 +1,9 @@
 ```mermaid
 flowchart TD
     subgraph Raw Data
-        raw_events["raw_events"]
-        raw_fights["raw_fights"]
-        raw_fighters["raw_fighters"]
+        raw_events
+        raw_fights
+        raw_fighters
     end
 
     subgraph Staging
