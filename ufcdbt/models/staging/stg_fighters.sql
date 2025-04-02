@@ -21,4 +21,4 @@ SELECT
   url,
   last_updated_at
 FROM
-  {{ source('ufcdb', 'raw_fighters')}}
+  {{ source('database', 'raw_fighters')}}

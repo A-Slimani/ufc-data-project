@@ -35,3 +35,6 @@ models:
     staging:
       +materialized: table 
 
+vars:
+  schema_name: "{{ 'ufcdb' if target.name == 'local' else 'neondb' }}"
+  

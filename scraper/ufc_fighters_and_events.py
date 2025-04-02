@@ -1,4 +1,5 @@
-from extensions.get_missing_pages import get_missing_page_list 
+from extensions.missing_pages import get_missing_page_list 
+from extensions.missing_pages import write_to_file
 import psycopg2
 import logging
 import asyncio
@@ -9,16 +10,16 @@ import json
 import sys
 import os
 
-logDir = '/Users/aboud/Programming/ufc-data-project/logs'
 
 logging.basicConfig(
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
-    handlers=[logging.FileHandler(f'{logDir}/ufc_events_and_fighters.log'), logging.StreamHandler()],
+    handlers=[logging.FileHandler(f'{os.getenv('LOG_DIR')}/ufc_events_and_fighters.log'), logging.StreamHandler()],
     level=logging.INFO,
 )
 hishel_logger = logging.getLogger("hishel")
 logger = logging.getLogger(__name__)
 
+missing_ids = []
 
 async def get_data(page, semaphore, pool, sleep_time): 
   async with semaphore:
@@ -97,9 +98,11 @@ async def get_data(page, semaphore, pool, sleep_time):
                 "hometown_city": fighter["Born"]["City"],
                 "hometown_state": fighter["Born"]["State"],
                 "hometown_country": fighter["Born"]["Country"],
+                "hometown_country_tricode": fighter["Born"]["TriCode"],
                 "trains_at_city": fighter["FightingOutOf"]["City"],
                 "trains_at_state": fighter["FightingOutOf"]["State"],
                 "trains_at_country": fighter["FightingOutOf"]["Country"],
+                "trains_at_country_tricode": fighter["FightingOutOf"]["TriCode"],
                 "wins": fighter["Record"]["Wins"],
                 "losses": fighter["Record"]["Losses"],
                 "draws": fighter["Record"]["Draws"],
@@ -117,14 +120,17 @@ async def get_data(page, semaphore, pool, sleep_time):
                   INSERT INTO raw_fighters (
                     id, first_name, last_name, 
                     nickname, hometown_city, hometown_state, 
-                    hometown_country, trains_at_city, trains_at_state, 
-                    trains_at_country, wins, losses, draws, age, height, 
-                    stance, reach, weight, url, last_updated_at
+                    hometown_country, hometown_country_tricode, trains_at_city, 
+                    trains_at_state, trains_at_country, trains_at_country_tricode, 
+                    wins, losses, draws, 
+                    age, height, stance, 
+                    reach, weight, url, last_updated_at
                   ) VALUES (
                     $1, $2, $3, $4, $5, 
                     $6, $7, $8, $9, $10, 
                     $11, $12, $13, $14, $15, 
-                    $16, $17, $18, $19, CURRENT_TIMESTAMP
+                    $16, $17, $18, $19, $20,
+                    $21, CURRENT_TIMESTAMP
                   )
                   ON CONFLICT (id) DO UPDATE SET
                     id = EXCLUDED.id,
@@ -134,9 +140,11 @@ async def get_data(page, semaphore, pool, sleep_time):
                     hometown_city = EXCLUDED.hometown_city,
                     hometown_state = EXCLUDED.hometown_state,
                     hometown_country = EXCLUDED.hometown_country,
+                    hometown_country_tricode = EXCLUDED.hometown_country_tricode,
                     trains_at_city = EXCLUDED.trains_at_city,
                     trains_at_state = EXCLUDED.trains_at_state,
                     trains_at_country = EXCLUDED.trains_at_country,
+                    trains_at_country_tricode = EXCLUDED.trains_at_country_tricode,
                     wins = EXCLUDED.wins,
                     losses = EXCLUDED.losses,
                     draws = EXCLUDED.draws,
@@ -155,9 +163,11 @@ async def get_data(page, semaphore, pool, sleep_time):
                   fighter_data["hometown_city"],
                   fighter_data["hometown_state"],
                   fighter_data["hometown_country"],
+                  fighter_data["hometown_country_tricode"],
                   fighter_data["trains_at_city"],
                   fighter_data["trains_at_state"],
                   fighter_data["trains_at_country"],
+                  fighter_data["trains_at_country_tricode"],
                   fighter_data["wins"],
                   fighter_data["losses"],
                   fighter_data["draws"],
@@ -171,8 +181,7 @@ async def get_data(page, semaphore, pool, sleep_time):
                 conn.close()
         else:
           logger.info(f"No data found for page {page}")
-          with open(f'{logDir}/missing_pages.txt', 'a') as f:
-            f.write(f"{page}\n")
+          missing_ids.append(page)
           pass
 
     except Exception as e:
@@ -213,9 +222,11 @@ def create_fighter_table():
         hometown_city TEXT,
         hometown_state TEXT,
         hometown_country TEXT,
+        hometown_country_tricode TEXT,
         trains_at_city TEXT,
         trains_at_state TEXT,
         trains_at_country TEXT,
+        trains_at_country_tricode TEXT,
         wins INTEGER,
         losses INTEGER,
         draws INTEGER,
@@ -231,16 +242,15 @@ def create_fighter_table():
     )
     conn.commit()
 
-def get_max_event():
+def get_recent_and_upcoming_events():
   conn = psycopg2.connect(os.getenv("DB_URI"))
   with conn.cursor() as cursor:
-    cursor.execute("SELECT id FROM raw_events where date::date > CURRENT_DATE")
+    cursor.execute("SELECT id FROM raw_events where date::date > CURRENT_DATE - 1")
     results = cursor.fetchall()
     page_list = [page[0] for page in results]
     return page_list 
 
 async def main():
-  get_max_event()
   create_event_table()
   create_fighter_table()
 
@@ -250,28 +260,27 @@ async def main():
     max_size=16
   )
 
-  semaphore = asyncio.Semaphore(16)
-  if sys.argv[1] == "--partial":
-    pages = get_missing_page_list(f"{logDir}/missing_pages.txt")
+  semaphore = asyncio.Semaphore(32)
+  if sys.argv[1] == "--missing":
+    pages = get_missing_page_list(f"{os.getenv('LOG_DIR')}/missing_pages.txt")
     tasks = [get_data(page, semaphore, pool, 1) for page in pages]
-
   elif sys.argv[1] == '--recent':
-    max_pages = get_max_event()
-    pages = max_pages + [i for i in range(max(max_pages), max(max_pages) + 10)]  
+    max_pages = get_recent_and_upcoming_events()
+    pages = max_pages + [i for i in range(min(max_pages), max(max_pages) + 20)]  
     tasks = [get_data(page, semaphore, pool, 1) for page in pages]
-
-  elif sys.argv[1] == "--full":
+  elif sys.argv[1] == "--build":
     # need to update the range make it a case e.g. if no data for 10 consecutive pages exit
     tasks = [get_data(page, semaphore, pool, 1) for page in range(1, 1300)]
-
   elif sys.argv[1] == "--test":
     random_pages = [random.randint(100, 900) for _ in range(20)]
     tasks = [get_data(page, semaphore, pool, 1) for page in random_pages]
-
   else:
-    print("Need to pass an argument: --partial, --recent, --full, --test")
+    print("Need to pass an argument: --missing, --recent, --full, --test")
 
   await asyncio.gather(*tasks)
+  # store all the missing pages into a txt
+  write_to_file(f"{os.getenv('LOG_DIR')}/missing_events_and_fighters.txt", missing_ids)
+
 
 if __name__ == '__main__':
   asyncio.run(main())

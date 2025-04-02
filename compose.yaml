@@ -84,20 +84,28 @@ services:
     restart: always
     command: airflow scheduler
   
-  apache-superset:
-    image: apache/superset
-    user: root
-    environment:
-      - SUPERSET_SECRET_KEY=skibidi
-      - POSTGRES_DB=superset
-      - POSTGRES_USER=superset
-      - POSTGRES_PASSWORD=superset
-    ports:
-      - "8088:8088"
+  # apache-superset:
+  #   image: apache/superset
+  #   user: root
+  #   environment:
+  #     - SUPERSET_SECRET_KEY=skibidi
+  #     - POSTGRES_DB=superset
+  #     - POSTGRES_USER=superset
+  #     - POSTGRES_PASSWORD=superset
+  #   ports:
+  #     - "8088:8088"
+  #   volumes:
+  #     - ./superset_home:/app/superset_home
+  #   depends_on:
+  #     - ufc-db
+  
+  dbt:
+    image: ghcr.io/dbt-labs/dbt-postgres:1.9.0
+    container_name: dbt
+    command:
+      ["run", "--profiles-dir", "/usr/app/dbt" ,"--target", 'cloud']
     volumes:
-      - ./superset_home:/app/superset_home
-    depends_on:
-      - ufc-db
+      - ./ufcdbt:/usr/app/dbt
 
 
 

@@ -1,7 +1,7 @@
 sources:
-  - name: ufcdb
+  - name: database 
     description: "Source of ufc data"
-    database: ufcdb
+    database: "{{ target.dbname }}" 
     schema: public
     tables:
       - name: raw_fighters

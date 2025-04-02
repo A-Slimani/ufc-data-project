@@ -40,7 +40,7 @@ SELECT
   f.r_fight_stats->>'GroundControlTime' AS r_ground_control_time,
   f.b_fight_stats->>'GroundControlTime' AS b_ground_control_time
 FROM
-  {{ source('ufcdb', 'raw_fights') }} f
+  {{ source('database', 'raw_fights') }} f
 JOIN
   {{ ref('stg_events') }} e
 ON
