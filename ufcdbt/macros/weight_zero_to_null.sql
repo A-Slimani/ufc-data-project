@@ -4,3 +4,4 @@ CASE
   ELSE {{ weight_val }}
 END AS "weight"
 {% endmacro %}
+-- could change it to a NULLIF COLUMN

@@ -22,6 +22,7 @@ models:
         description: "country where event was held"
       - name: venue
         description: "venue where event was held"
+
   - name: fighters_raw
     description: table of ufc fighters
     columns:

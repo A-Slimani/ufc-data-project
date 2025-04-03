@@ -5,10 +5,13 @@ SELECT
   city,
   state,
   country,
+  country_tricode,
   venue,
+  organisation_data ->> 'OrganizationId' AS organisation_id,
+  organisation_data ->> 'Name' AS organisation_name,
   last_updated_at
 FROM
   {{ source('database', 'raw_events') }}
 WHERE 
-  name LIKE 'UFC%' OR name LIKE 'The Ultimate%'
+  CAST(organisation_data ->> 'OrganizationId' AS INTEGER) = 1
   
