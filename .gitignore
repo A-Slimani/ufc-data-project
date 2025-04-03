@@ -9,3 +9,4 @@ __pycache__/
 .DS_*
 logs/
 .local
+profiles.yml
