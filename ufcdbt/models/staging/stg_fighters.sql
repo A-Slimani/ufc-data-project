@@ -2,6 +2,7 @@ SELECT
   id,
   first_name,
   last_name,
+  (first_name || ' '  || last_name) AS full_name,
   nickname AS "nick_name",
   hometown_city,
   hometown_state,
@@ -18,8 +19,9 @@ SELECT
   {{ inches_to_cm('height') }},
   stance,
   {{ inches_to_cm('reach') }},
-  {{ weight_zero_to_null('weight') }},
-  {{ convert_to_weight_division('weight') }},
+  weight_class_data ->> 'WeightClassId' AS "weight_class_id",
+  weight_class_data ->> 'WeightClassOrder' AS "weight_class_order",
+  weight_class_data ->> 'Description' AS "weight_class_description",
   url,
   last_updated_at
 FROM

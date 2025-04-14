@@ -10,5 +10,6 @@
         WHEN {{ weight_col }} <= 185 THEN 'Middleweight'
         WHEN {{ weight_col }} <= 205 THEN 'Light Heavyweight'
         ELSE 'Heavyweight'
-    END AS "weight_class"
+    END 
 {% endmacro %}
+-- not using currently

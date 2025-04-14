@@ -110,9 +110,13 @@ async def get_data(page, semaphore, pool, sleep_time):
                 "height": fighter["Height"],
                 "stance": fighter["Stance"],
                 "reach": fighter["Reach"],
-                "weight": fighter["Weight"],
                 "url": fighter["UFCLink"],
               }
+
+              if fighter["WeightClasses"]:
+                fighter_data["weight_class_data"] = json.dumps(fighter["WeightClasses"][0])
+              else:
+                fighter_data["weight_class_data"] = None
         
               async with pool.acquire() as conn:
                 await conn.execute(
@@ -124,7 +128,7 @@ async def get_data(page, semaphore, pool, sleep_time):
                     trains_at_state, trains_at_country, trains_at_country_tricode, 
                     wins, losses, draws, 
                     age, height, stance, 
-                    reach, weight, url, last_updated_at
+                    reach, weight_class_data, url, last_updated_at
                   ) VALUES (
                     $1, $2, $3, $4, $5, 
                     $6, $7, $8, $9, $10, 
@@ -152,7 +156,7 @@ async def get_data(page, semaphore, pool, sleep_time):
                     height = EXCLUDED.height,
                     stance = EXCLUDED.stance,
                     reach = EXCLUDED.reach,
-                    weight = EXCLUDED.weight,
+                    weight_class_data = EXCLUDED.weight_class_data,
                     url = EXCLUDED.url,
                     last_updated_at = CURRENT_TIMESTAMP
                   """,
@@ -175,7 +179,7 @@ async def get_data(page, semaphore, pool, sleep_time):
                   fighter_data["height"],
                   fighter_data["stance"],
                   fighter_data["reach"],
-                  fighter_data["weight"],
+                  fighter_data["weight_class_data"],
                   fighter_data["url"],
                 )
                 conn.close()
@@ -234,7 +238,7 @@ def create_fighter_table():
         height INTEGER,
         stance TEXT,
         reach INTEGER,
-        weight INTEGER, 
+        weight_class_data JSONB, 
         url TEXT,
         last_updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL
       )

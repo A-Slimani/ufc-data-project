@@ -1,8 +1,12 @@
 SELECT
   fighter_id,
+  full_name,
   first_name,
   last_name,
   nick_name,
+  weight_class_id,
+  weight_class_description,
+  weight_class_order,
   hometown_city,
   hometown_state,
   hometown_country,

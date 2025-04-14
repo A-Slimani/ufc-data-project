@@ -16,7 +16,7 @@ WITH combined_ids AS (
     f.r_ground_control_time AS "ground_control_time"
   FROM
     {{ ref('stg_fights')}} f
-  JOIN
+  LEFT JOIN
     {{ ref('stg_fighters')}} fs
   ON
     f.r_fighter_id = fs.id
@@ -38,7 +38,7 @@ WITH combined_ids AS (
     f.b_ground_control_time AS "ground_control_time"
   FROM
     {{ ref('stg_fights')}} f
-  JOIN
+  LEFT JOIN
     {{ ref('stg_fighters')}} fs
   ON
     f.b_fighter_id = fs.id

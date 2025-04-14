@@ -1,5 +1,6 @@
 SELECT 
   p.fighter_id,
+  f.full_name,
   f.first_name,
   f.last_name,
   f.nick_name,
@@ -11,6 +12,9 @@ SELECT
   f.trains_at_state,
   f.trains_at_country,
   f.trains_at_country_tricode,
+  f.weight_class_id,
+  f.weight_class_description,
+  f.weight_class_order,
   (f.wins + f.losses + f.draws) AS "total_fights",
   f.wins AS "total_wins",
   f.losses AS "total_losses",

@@ -40,4 +40,4 @@ SELECT
   r_ground_control_time,
   b_ground_control_time
 FROM
-  {{ ref('stg_fights') }}
+  {{ ref('int_fights_transformations') }}

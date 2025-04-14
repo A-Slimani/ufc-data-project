@@ -2,5 +2,5 @@
   CASE 
     WHEN {{ col }} IS NOT NULL THEN ROUND({{ col }} * 2.54)
     ELSE NULL
-  END AS {{ col}}
+  END AS {{ col }}
 {% endmacro %}
