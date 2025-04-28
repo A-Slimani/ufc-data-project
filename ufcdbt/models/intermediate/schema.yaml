@@ -1,0 +1,423 @@
+models:
+  - name: int_fighter_fight_stats
+    description: "generates fighters stats based of data from fights"
+    columns:
+      - name: fighter_id
+        description: "id of the fighter"
+        tests:
+          - unique
+          - not_null
+      - name: career_knockdowns
+        description: "total career knockdowns"
+        tests:
+          - not_null
+      - name: career_takedowns_attempted
+        description: "total career takedowns attempted"
+        tests:
+          - not_null
+      - name: career_takedowns_landed
+        description: "total career takedowns landed"
+        tests:
+          - not_null
+      - name: career_takedown_accuracy
+        description: "accuracy of total career takedowns"
+        tests:
+          - not_null
+      - name: career_sig_strikes_attempted
+        description: "total career strikes attempted"
+        tests:
+          - not_null
+      - name: career_sig_strikes_landed
+        description: "total career strikes landed"
+        tests:
+          - not_null
+      - name: career_total_strike_accuracy
+        description: "total career strikes accuracy"
+        tests:
+          - not_null
+      - name: career_submissions_attempted
+        description: "total career submissions attempted"
+        tests:
+          - not_null
+      - name: career_control_time_seconds
+        description: "total career control time in seconds"
+        tests:
+          - not_null
+      - name: career_clinch_control_time_seconds
+        description: "total career clinch control time in seconds"
+        tests:
+          - not_null
+      - name: career_ground_control_time_seconds
+        description: "total career ground control time in seconds"
+        tests:
+          - not_null
+
+  - name: int_fighter_transformations
+    columns:
+      - name: fighter_id
+        description: "Unique identifier for the fighter."
+        tests:
+          - unique
+          - not_null
+      - name: full_name
+        description: "Fighter's full name."
+        tests:
+          - not_null
+      - name: first_name
+        description: "Fighter's first name."
+        tests:
+          - not_null
+      - name: last_name
+        description: "Fighter's last name."
+        tests: 
+          - not_null
+      - name: nick_name
+        description: "Fighter's nickname."
+      - name: hometown_city
+        description: "City of fighter's hometown."
+      - name: hometown_state
+        description: "State of fighter's hometown."
+      - name: hometown_country
+        description: "Country of fighter's hometown."
+      - name: hometown_country_tricode
+        description: "Three-letter country code of fighter's hometown."
+      - name: trains_at_city
+        description: "City where fighter trains."
+      - name: trains_at_state
+        description: "State where fighter trains."
+      - name: trains_at_country
+        description: "Country where fighter trains."
+      - name: trains_at_country_tricode
+        description: "Three-letter country code where fighter trains."
+      - name: weight_class_id
+        description: "Identifier for the fighter's weight class."
+      - name: weight_class_description
+        description: "Description of the fighter's weight class."
+      - name: weight_class_order
+        description: "Ordering index for weight classes."
+      - name: total_fights
+        description: "Total fights (wins + losses + draws)."
+        tests:
+          - not_null
+      - name: total_wins
+        description: "Total wins."
+        tests:
+          - not_null
+      - name: total_losses
+        description: "Total losses."
+        tests:
+          - not_null
+      - name: total_draws
+        description: "Total draws."
+        tests:
+          - not_null
+      - name: total_win_percentage
+        description: "Percentage of total wins out of total fights."
+        tests:
+          - not_null
+      - name: ufc_fights
+        description: "Number of UFC fights."
+        tests:
+          - not_null
+      - name: ufc_wins
+        description: "Number of UFC wins."
+        tests:
+          - not_null
+      - name: ufc_losses
+        description: "Number of UFC losses."
+        tests:
+          - not_null
+      - name: ufc_draws
+        description: "Number of UFC draws."
+        tests:
+          - not_null
+      - name: ufc_win_percentage
+        description: "Percentage of UFC wins."
+        tests:
+          - not_null
+      - name: ufc_wins_by_ko_tko
+        description: "Number of UFC wins by KO/TKO."
+        tests:
+          - not_null
+      - name: ufc_wins_by_sub
+        description: "Number of UFC wins by submission."
+        tests:
+          - not_null
+      - name: ufc_wins_by_dec
+        description: "Number of UFC wins by decision."
+        tests:
+          - not_null
+      - name: career_knockdowns
+        description: "Total career knockdowns."
+        tests:
+          - not_null
+      - name: career_takedowns_attempted
+        description: "Total career takedowns attempted."
+        tests:
+          - not_null
+      - name: career_takedowns_landed
+        description: "Total career takedowns landed."
+        tests:
+          - not_null
+      - name: career_takedown_accuracy
+        description: "Career takedown accuracy percentage."
+        tests:
+          - not_null
+      - name: career_sig_strikes_attempted
+        description: "Career significant strikes attempted."
+        tests:
+          - not_null
+      - name: career_sig_strikes_landed
+        description: "Career significant strikes landed."
+        tests:
+          - not_null
+      - name: career_sig_strike_accuracy
+        description: "Career significant strike accuracy percentage."
+        tests:
+          - not_null
+      - name: career_total_strikes_attempted
+        description: "Career total strikes attempted."
+        tests:
+          - not_null
+      - name: career_total_strikes_landed
+        description: "Career total strikes landed."
+        tests:
+          - not_null
+      - name: career_total_strike_accuracy
+        description: "Career total strike accuracy percentage."
+        tests:
+          - not_null
+      - name: career_submissions_attempted
+        description: "Career submissions attempted."
+        tests:
+          - not_null
+      - name: career_control_time_seconds
+        description: "Career control time in seconds."
+        tests:
+          - not_null
+      - name: career_clinch_control_time_seconds
+        description: "Career clinch control time in seconds."
+        tests:
+          - not_null
+      - name: career_ground_control_time_seconds
+        description: "Career ground control time in seconds."
+        tests:
+          - not_null
+
+
+  - name: int_fighter_ufc_stats
+    description: "generate fighter stats specific for the ufc"
+    columns:
+      - name: fighter_id
+        description: "id of the fighter"
+        tests:
+          - unique
+          - not_null
+      - name: ufc_fights
+        description: "total number of ufc fights"
+        tests:
+          - not_null
+      - name: ufc_wins
+        description: "total number of ufc wins"
+        tests:
+          - not_null
+      - name: ufc_losses
+        description: "total number of ufc losses"
+        tests:
+          - not_null
+      - name: ufc_draws
+        description: "total number of ufc draws"
+        tests:
+          - not_null
+      - name: ufc_win_percentage
+        description: "win percentage of the fighter"
+        tests:
+          - not_null
+          - percentage_check
+
+  - name: int_fighter_ufc_wins_by
+    description: "generate fighter ufc fights wins by"
+    columns:
+      - name: fighter_id
+        description: "id of the fighter"
+        tests:
+          - unique
+          - not_null
+      - name: ufc_wins
+        description: "total ufc wins"
+        tests:
+          - not_null
+      - name: ufc_wins_by_ko_tko
+        description: "total ufc wins by KO/TKO"
+        tests:
+          - not_null
+      - name: ufc_wins_by_sub
+        description: "total ufc wins by submission"
+        tests:
+          - not_null
+      - name: ufc_wins_by_dec
+        description: "total ufc wins by decision"
+        tests:
+          - not_null
+
+  - name: int_fights_transformations
+    description: "all the fight transformations"
+    columns:
+      - name: id
+        description: "primary key for the fight"
+        tests:
+          - unique
+          - not_null
+      - name: event_id
+        description: "id for the event"
+        tests:
+          - not_null
+          - relationships:
+              to: ref('stg_events')
+              field: id
+      - name: r_fighter_id
+        description: "red corner fight id"
+        tests:
+          - not_null
+      - name: b_fighter_id
+        description: "blue corner fighter id"
+        tests:
+          - not_null
+      - name: round
+        description: "round in which the fight ended"
+        tests:
+          - not_null
+      - name: method
+        description: "method of victory"
+        tests:
+          - not_null
+      - name: method_type
+        description: "numeric conversion of method (KO - 1, sub - 2, dec - 3, other - 0)"
+        tests:
+          - not_null
+          - accepted_values:
+              values: [0, 1, 2, 3]
+      - name: bout_weight
+        description: "weight class of the fight"
+        tests:
+          - not_null
+      - name: url
+        description: "api url for the fight"
+        tests:
+          - not_null
+      - name: fight_date
+        description: "date of the fight"
+        tests:
+          - not_null
+      - name: last_updated_at
+        description: "timestamp of the last update"
+        tests:
+          - not_null
+      - name: clinch_time
+        description: "clinch time in MM:SS format"
+      - name: clinch_time_seconds
+        description: "clinch time in seconds"
+      - name: ground_time
+        description: "ground time in MM:SS format"
+      - name: ground_time_seconds
+        description: "ground time in seconds"
+      - name: standing_time
+        description: "standing time in MM:SS format"
+      - name: standing_time_seconds
+        description: "standing time in seconds"
+      - name: r_knockdowns
+        description: "red corner knockdowns"
+        tests:
+          - not_null
+      - name: b_knockdowns
+        description: "blue corner knockdowns"
+        tests:
+          - not_null
+      - name: r_takedowns_attempted
+        description: "red corner takedowns attempted"
+        tests:
+          - not_null
+      - name: b_takedowns_attempted
+        description: "blue corner takedowns attempted"
+        tests:
+          - not_null
+      - name: r_takedowns_landed
+        description: "red corner takedowns landed"
+        tests:
+          - not_null
+      - name: b_takedowns_landed
+        description: "blue corner takedowns landed"
+        tests:
+          - not_null
+      - name: r_sig_strikes_attempted
+        description: "red corner significant strikes attempted"
+        tests:
+          - not_null
+      - name: b_sig_strikes_attempted
+        description: "blue corner significant strikes attempted"
+        tests:
+          - not_null
+      - name: r_sig_strikes_landed
+        description: "red corner significant strikes landed"
+        tests:
+          - not_null
+      - name: b_sig_strikes_landed
+        description: "blue corner significant strikes landed"
+        tests:
+          - not_null
+      - name: r_sig_strikes_accuracy
+        description: "red corner significant strikes accuracy"
+        tests:
+          - not_null
+      - name: b_sig_strikes_accuracy
+        description: "blue corner significant strikes accuracy"
+        tests:
+          - not_null
+      - name: r_total_strikes_attempted
+        description: "red corner strikes attempted"
+        tests:
+          - not_null
+      - name: b_total_strikes_attempted
+        description: "blue corner strikes attempted"
+        tests:
+          - not_null
+      - name: r_total_strikes_landed
+        description: "red corner strikes landed"
+        tests:
+          - not_null
+      - name: b_total_strikes_landed
+        description: "blue corner strikes landed"
+        tests:
+          - not_null
+      - name: r_submissions_attempted
+        description: "red corner submissions attempted"
+        tests:
+          - not_null
+      - name: b_submissions_attempted
+        description: "blue corner submissions attempted"
+        tests:
+          - not_null
+      - name: r_total_control_time
+        description: "red corner total control time in MM:SS format"
+      - name: r_total_control_time_seconds
+        description: "red corner total control time in seconds"
+      - name: b_total_control_time
+        description: "blue corner total control time in MM:SS format"
+      - name: b_total_control_time_seconds
+        description: "blue corner total control time in seconds"
+      - name: r_clinch_control_time
+        description: "red corner total clinch control time in MM:SS format"
+      - name: r_clinch_control_time_seconds
+        description: "red corner total control time in seconds"
+      - name: b_clinch_control_time
+        description: "blue corner total clinch control time in MM:SS format"
+      - name: b_clinch_control_time_seconds
+        description: "blue corner total control time in seconds"
+      - name: r_ground_control_time
+        description: "red corner total ground control time in MM:SS format"
+      - name: r_ground_control_time_seconds
+        description: "red corner total ground control time in seconds"
+      - name: b_ground_control_time
+        description: "blue corner total ground control time in MM:SS format"
+      - name: b_ground_control_time_seconds
+        description: "blue corner total ground control time in seconds"

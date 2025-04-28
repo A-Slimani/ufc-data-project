@@ -20,6 +20,7 @@ SELECT
   COUNT(CASE WHEN ct.fighter_status = 'Win' THEN 1 END) AS ufc_wins,
   COUNT(CASE WHEN ct.fighter_status = 'Loss' THEN 1 END) AS ufc_losses,
   COUNT(CASE WHEN ct.fighter_status = 'Draw' THEN 1 END) AS ufc_draws,
+  COUNT(CASE WHEN ct.fighter_status = 'No Contest' THEN 1 END) AS ufc_no_contests,
   ROUND((COUNT(CASE WHEN ct.fighter_status = 'Win' THEN 1 END)::NUMERIC / COUNT(*)) * 100, 2) AS ufc_win_percentage
 FROM combined_tables ct 
 JOIN {{ ref('stg_fighters') }} f

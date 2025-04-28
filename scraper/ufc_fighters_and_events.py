@@ -252,6 +252,7 @@ def get_recent_and_upcoming_events():
     cursor.execute("SELECT id FROM raw_events where date::date > CURRENT_DATE - 1")
     results = cursor.fetchall()
     page_list = [page[0] for page in results]
+    conn.close()
     return page_list 
 
 async def main():
@@ -270,11 +271,15 @@ async def main():
     tasks = [get_data(page, semaphore, pool, 1) for page in pages]
   elif sys.argv[1] == '--recent':
     max_pages = get_recent_and_upcoming_events()
-    pages = max_pages + [i for i in range(min(max_pages), max(max_pages) + 20)]  
+    pages = max_pages + [i for i in range(min(max_pages) - 20, max(max_pages) + 20)]  
     tasks = [get_data(page, semaphore, pool, 1) for page in pages]
   elif sys.argv[1] == "--build":
-    # need to update the range make it a case e.g. if no data for 10 consecutive pages exit
-    tasks = [get_data(page, semaphore, pool, 1) for page in range(1, 1300)]
+    conn = psycopg2.connect(os.getenv("DB_URI"))
+    with conn.cursor() as cursor:
+      cursor.execute("SELECT MAX(id) FROM raw_events")
+      result = cursor.fetchone()
+      conn.close()
+    tasks = [get_data(page, semaphore, pool, 1) for page in range(1, result[0] + 30)] # test this
   elif sys.argv[1] == "--test":
     random_pages = [random.randint(100, 900) for _ in range(20)]
     tasks = [get_data(page, semaphore, pool, 1) for page in random_pages]

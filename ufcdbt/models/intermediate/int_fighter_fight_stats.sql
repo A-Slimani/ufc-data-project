@@ -11,7 +11,7 @@ WITH combined_ids AS (
     f.r_total_strikes_landed AS "total_strikes_landed",
     f.r_total_strikes_attempted AS "total_strikes_attempted",
     f.r_submissions_attempted AS "submissions_attempted",
-    f.r_control_time AS "control_time",
+    f.r_total_control_time AS "total_control_time",
     f.r_clinch_control_time AS "clinch_control_time",
     f.r_ground_control_time AS "ground_control_time"
   FROM
@@ -33,7 +33,7 @@ WITH combined_ids AS (
     f.b_total_strikes_landed AS "total_strikes_landed",
     f.b_total_strikes_attempted AS "total_strikes_attempted",
     f.b_submissions_attempted AS "submissions_attempted",
-    f.b_control_time AS "control_time",
+    f.b_total_control_time AS "total_control_time",
     f.b_clinch_control_time AS "clinch_control_time",
     f.b_ground_control_time AS "ground_control_time"
   FROM
@@ -47,18 +47,18 @@ WITH combined_ids AS (
 SELECT 
   fighter_id,
   SUM(knockdowns::NUMERIC) as career_knockdowns,
-  SUM(takedowns_landed::NUMERIC) as career_takedowns_landed,
   SUM(takedowns_attempted::NUMERIC) AS career_takedowns_attempted,
-  ROUND(SUM(takedowns_landed::NUMERIC) / NULLIF(SUM(takedowns_attempted::NUMERIC), 0) * 100, 2) AS career_takedown_accuracy,
-  SUM(sig_strikes_landed::NUMERIC) AS career_sig_strikes_landed,
+  SUM(takedowns_landed::NUMERIC) as career_takedowns_landed,
+  COALESCE(ROUND(SUM(takedowns_landed::NUMERIC) / NULLIF(SUM(takedowns_attempted::NUMERIC), 0) * 100, 2), 0) AS career_takedown_accuracy,
   SUM(sig_strikes_attempted::NUMERIC) AS career_sig_strikes_attempted,
-  ROUND(SUM(sig_strikes_landed::NUMERIC) / NULLIF(SUM(sig_strikes_attempted::NUMERIC), 0) * 100, 2) AS career_sig_strike_accuracy,
+  SUM(sig_strikes_landed::NUMERIC) AS career_sig_strikes_landed,
+  COALESCE(ROUND(SUM(sig_strikes_landed::NUMERIC) / NULLIF(SUM(sig_strikes_attempted::NUMERIC), 0) * 100, 2), 0) AS career_sig_strike_accuracy,
   SUM(total_strikes_landed::NUMERIC) AS career_total_strikes_landed,
   SUM(total_strikes_attempted::NUMERIC) AS career_total_strikes_attempted,
-  ROUND(SUM(total_strikes_landed::NUMERIC) / NULLIF(SUM(total_strikes_attempted::NUMERIC), 0) * 100, 2) AS career_total_strike_accuracy,
+  COALESCE(ROUND(SUM(total_strikes_landed::NUMERIC) / NULLIF(SUM(total_strikes_attempted::NUMERIC), 0) * 100, 2), 0) AS career_total_strike_accuracy,
   SUM(submissions_attempted::NUMERIC) AS career_submissions_attempted,
-  SUM(EXTRACT(EPOCH FROM control_time::INTERVAL)::NUMERIC) AS career_control_time_seconds,
-  SUM(EXTRACT(EPOCH FROM clinch_control_time::INTERVAL)::NUMERIC) AS career_clinch_control_time_seconds,
-  SUM(EXTRACT(EPOCH FROM ground_control_time::INTERVAL)::NUMERIC) AS career_ground_control_time_seconds
+  COALESCE(SUM(EXTRACT(EPOCH FROM total_control_time::INTERVAL)::NUMERIC), 0) AS career_control_time_seconds,
+  COALESCE(SUM(EXTRACT(EPOCH FROM clinch_control_time::INTERVAL)::NUMERIC), 0) AS career_clinch_control_time_seconds,
+  COALESCE(SUM(EXTRACT(EPOCH FROM ground_control_time::INTERVAL)::NUMERIC), 0) AS career_ground_control_time_seconds
 FROM combined_ids ci
 GROUP BY fighter_id

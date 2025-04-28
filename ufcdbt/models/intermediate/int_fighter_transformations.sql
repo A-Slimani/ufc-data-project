@@ -25,9 +25,9 @@ SELECT
   p.ufc_losses,
   p.ufc_draws,
   p.ufc_win_percentage,
-  b.ko_tko AS "wins_by_ko_tko",
-  b.dec AS "wins_by_dec",
-  b.sub AS "wins_by_sub",
+  b.ufc_wins_by_ko_tko, 
+  b.ufc_wins_by_sub, 
+  b.ufc_wins_by_dec,
   fs.career_knockdowns,
   fs.career_takedowns_attempted,
   fs.career_takedowns_landed,
@@ -42,9 +42,9 @@ SELECT
   fs.career_control_time_seconds,
   fs.career_clinch_control_time_seconds,
   fs.career_ground_control_time_seconds
-FROM {{ ref('int_fighter_percentages') }} p
+FROM {{ ref('int_fighter_ufc_stats') }} p
 JOIN 
-  {{ ref('int_fighter_wins_by') }} b ON p.fighter_id = b.fighter_id
+  {{ ref('int_fighter_ufc_wins_by') }} b ON p.fighter_id = b.fighter_id
 JOIN
   {{ ref('stg_fighters') }} f ON f.id = b.fighter_id
 JOIN 

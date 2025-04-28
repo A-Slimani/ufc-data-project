@@ -1,0 +1,31 @@
+models:
+  - name: dim_events
+    columns:
+      - name: id 
+        description: "primary key"
+        tests:
+          - not_null
+          - unique
+      - name: name
+        description: "name of the event"
+        tests:
+          - not_null
+      - name: date
+        description: "date of the event"
+        tests:
+          - not_null
+      - name: city 
+        description: "city where the event was held"
+        tests:
+          - not_null
+      - name: state
+        description: "state where the event was held"
+      - name: country
+        description: "country where the event was held"
+        tests:
+          - not_null
+      - name: venue
+        description: "name of the venue where the event was held in"
+        tests:
+          - not_null
+

@@ -10,12 +10,12 @@ WITH winning_fighter AS (
 )
 SELECT 
   a.fighter_id,
-  COUNT(method_type) AS "wins",
-  COUNT(CASE WHEN a.method_type=1 THEN 1 END) AS ko_tko, 
-  COUNT(CASE WHEN a.method_type=2 THEN 1 END) AS dec, 
-  COUNT(CASE WHEN a.method_type=3 THEN 1 END) AS sub 
+  COUNT(method_type) AS "ufc_wins",
+  COUNT(CASE WHEN a.method_type=1 THEN 1 END) AS "ufc_wins_by_ko_tko", 
+  COUNT(CASE WHEN a.method_type=2 THEN 1 END) AS "ufc_wins_by_dec", 
+  COUNT(CASE WHEN a.method_type=3 THEN 1 END) AS "ufc_wins_by_sub" 
 FROM winning_fighter a
-LEFT JOIN {{ ref('stg_fighters') }} b
+JOIN {{ ref('stg_fighters') }} b
 ON a.fighter_id = b.id
-WHERE a.method_type IS NOT NULL
+WHERE a.fighter_id IS NOT NULL
 GROUP BY a.fighter_id
