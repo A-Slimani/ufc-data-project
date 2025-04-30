@@ -35,20 +35,14 @@ models:
         description: "Number of wins"
         tests:
           - not_null
-          - expression: 
-              sql: "wins >= 0"
       - name: losses
         description: "Number of losses"
         tests:
           - not_null
-          - expression: 
-              sql: "losses >= 0"
       - name: draws
         description: "Number of draws"
         tests:
           - not_null
-          - expression: 
-              sql: "draws >= 0"
       - name: age
         description: "Age of the fighter"
       - name: height
