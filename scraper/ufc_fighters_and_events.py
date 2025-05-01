@@ -279,7 +279,7 @@ async def main():
       cursor.execute("SELECT MAX(id) FROM raw_events")
       result = cursor.fetchone()
       conn.close()
-    tasks = [get_data(page, semaphore, pool, 1) for page in range(1, result[0] + 30)] # test this
+    tasks = [get_data(page, semaphore, pool, 1) for page in range(1, 1300)] # change the 1300
   elif sys.argv[1] == "--test":
     random_pages = [random.randint(100, 900) for _ in range(20)]
     tasks = [get_data(page, semaphore, pool, 1) for page in random_pages]
