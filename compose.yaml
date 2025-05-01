@@ -83,7 +83,8 @@ services:
       AIRFLOW__WEBSERVER__SECRET_KEY: "skibidi"
     restart: always
     command: airflow scheduler
-  
+
+  ## NOT USING APACHE SUPERSET ANYMORE 
   # apache-superset:
   #   image: apache/superset
   #   user: root
