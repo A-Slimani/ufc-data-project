@@ -103,11 +103,10 @@ services:
   dbt:
     image: ghcr.io/dbt-labs/dbt-postgres:1.9.0
     container_name: dbt
-    command:
-      ["run", "--profiles-dir", "/usr/app/dbt" ,"--target", 'cloud']
+    command: >
+      run --profiles-dir /usr/app/dbt --target cloud
     volumes:
       - ./ufcdbt:/usr/app/dbt
-
 
 
 volumes:
