@@ -83,7 +83,8 @@ services:
       AIRFLOW__WEBSERVER__SECRET_KEY: "skibidi"
     restart: always
     command: airflow scheduler
-  
+
+  ## NOT USING APACHE SUPERSET ANYMORE 
   # apache-superset:
   #   image: apache/superset
   #   user: root
@@ -102,11 +103,10 @@ services:
   dbt:
     image: ghcr.io/dbt-labs/dbt-postgres:1.9.0
     container_name: dbt
-    command:
-      ["run", "--profiles-dir", "/usr/app/dbt" ,"--target", 'cloud']
+    command: >
+      run --profiles-dir /usr/app/dbt --target cloud
     volumes:
       - ./ufcdbt:/usr/app/dbt
-
 
 
 volumes:

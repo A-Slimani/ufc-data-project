@@ -115,6 +115,7 @@ models:
         description: "Percentage of total wins out of total fights."
         tests:
           - not_null
+          - percentage_check
       - name: ufc_fights
         description: "Number of UFC fights."
         tests:
@@ -135,6 +136,7 @@ models:
         description: "Percentage of UFC wins."
         tests:
           - not_null
+          - percentage_check
       - name: ufc_wins_by_ko_tko
         description: "Number of UFC wins by KO/TKO."
         tests:
@@ -163,6 +165,7 @@ models:
         description: "Career takedown accuracy percentage."
         tests:
           - not_null
+          - percentage_check
       - name: career_sig_strikes_attempted
         description: "Career significant strikes attempted."
         tests:
@@ -175,6 +178,7 @@ models:
         description: "Career significant strike accuracy percentage."
         tests:
           - not_null
+          - percentage_check
       - name: career_total_strikes_attempted
         description: "Career total strikes attempted."
         tests:
@@ -187,6 +191,7 @@ models:
         description: "Career total strike accuracy percentage."
         tests:
           - not_null
+          - percentage_check
       - name: career_submissions_attempted
         description: "Career submissions attempted."
         tests:
