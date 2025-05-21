@@ -6,7 +6,6 @@ SELECT
   nick_name,
   weight_class_id,
   weight_class_description,
-  weight_class_order,
   hometown_city,
   hometown_state,
   hometown_country,
@@ -22,6 +21,7 @@ SELECT
   ufc_wins,
   ufc_losses,
   ufc_draws,
+  ufc_no_contests,
   ufc_win_percentage,
   ufc_wins_by_ko_tko,
   ufc_wins_by_dec,
@@ -37,8 +37,11 @@ SELECT
   career_total_strikes_landed,
   career_total_strike_accuracy,
   career_submissions_attempted,
+  career_control_time,
   career_control_time_seconds,
+  career_clinch_control_time,
   career_clinch_control_time_seconds,
+  career_ground_control_time,
   career_ground_control_time_seconds
 FROM
   {{ ref('int_fighter_transformations') }}

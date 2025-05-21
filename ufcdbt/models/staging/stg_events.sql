@@ -1,7 +1,7 @@
 SELECT
   id,
   name,
-  date,
+  CAST(date AS TIMESTAMP),
   city,
   state,
   country,

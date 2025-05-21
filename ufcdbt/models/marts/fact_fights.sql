@@ -2,9 +2,12 @@ SELECT
   id,
   event_id,
   r_fighter_id,
+  r_fighter_name,
   r_fighter_status,
   b_fighter_id,
+  b_fighter_name,
   b_fighter_status,
+  fight_order,
   round,
   time,
   method,
@@ -36,10 +39,16 @@ SELECT
   r_submissions_attempted,
   b_submissions_attempted,
   r_total_control_time,
+  r_total_control_time_seconds,
   b_total_control_time,
+  b_total_control_time_seconds,
   r_clinch_control_time,
+  r_clinch_control_time_seconds,
   b_clinch_control_time,
+  b_clinch_control_time_seconds,
   r_ground_control_time,
-  b_ground_control_time
+  r_ground_control_time_seconds,
+  b_ground_control_time,
+  b_ground_control_time_seconds
 FROM
   {{ ref('int_fights_transformations') }}

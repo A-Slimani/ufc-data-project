@@ -28,4 +28,18 @@ models:
         description: "name of the venue where the event was held in"
         tests:
           - not_null
-
+  - name: dim_fighters
+    columns:
+      - name: fighter_id
+        description: "primary key"
+        tests:
+          - not_null
+          - unique
+      - name: first_name
+        description: "first name of the fighter"
+      - name: last_name
+        description: "last name of the fighter"
+      - name: nick_name
+        description: "nick name of the fighter"
+      - name: weight_class
+        description: "weight class of the fighter"

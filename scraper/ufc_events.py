@@ -1,3 +1,6 @@
+"""
+SCRIPT CURRENTLY NOT IN USE ANYMORE
+"""
 from datetime import datetime
 import psycopg2
 import logging

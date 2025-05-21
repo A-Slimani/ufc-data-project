@@ -1,5 +1,6 @@
 from extensions.missing_pages import get_missing_page_list 
 from extensions.missing_pages import write_to_file
+from pathlib import Path
 import psycopg2
 import logging
 import asyncio
@@ -27,7 +28,7 @@ async def get_data(page, semaphore, pool, sleep_time):
       await asyncio.sleep(sleep_time)
 
       async with hishel.AsyncCacheClient(
-        storage=hishel.AsyncFileStorage(base_path="./.cache/ufc_events/", ttl=3600 * 24),
+        storage=hishel.AsyncFileStorage(base_path=Path("./.cache/ufc_events/"), ttl=3600 * 24),
         verify=False,
       ) as client:
         try:
@@ -266,8 +267,9 @@ async def main():
   )
 
   semaphore = asyncio.Semaphore(32)
+  tasks = []
   if sys.argv[1] == "--missing":
-    pages = get_missing_page_list(f"{os.getenv('LOG_DIR')}/missing_pages.txt")
+    pages = get_missing_page_list(f"{os.getenv('LOG_DIR')}/missing_events_and_fighters.txt")
     tasks = [get_data(page, semaphore, pool, 1) for page in pages]
   elif sys.argv[1] == '--recent':
     max_pages = get_recent_and_upcoming_events()
@@ -277,12 +279,18 @@ async def main():
     conn = psycopg2.connect(os.getenv("DB_URI"))
     with conn.cursor() as cursor:
       cursor.execute("SELECT MAX(id) FROM raw_events")
-      result = cursor.fetchone()
       conn.close()
     tasks = [get_data(page, semaphore, pool, 1) for page in range(1, 1300)] # change the 1300
   elif sys.argv[1] == "--test":
     random_pages = [random.randint(100, 900) for _ in range(20)]
     tasks = [get_data(page, semaphore, pool, 1) for page in random_pages]
+  elif sys.argv[1] == "--help":
+    print("Usage: python ufc_fighters_and_events.py --missing | --recent | --build | --test")
+    print("  --missing: Get missing pages from the list")
+    print("  --recent: Get recent and upcoming events")
+    print("  --build: Build the database from scratch")
+    print("  --test: Get random pages for testing")
+    print("  --help: Show this help message")
   else:
     print("Need to pass an argument: --missing, --recent, --full, --test")
 

@@ -2,9 +2,12 @@ SELECT
     f.id,
     f.event_id,
     f.r_fighter_id,
+    rf.full_name AS r_fighter_name,
     f.r_fighter_status,
     f.b_fighter_id,
+    bf.full_name AS b_fighter_name, 
     f.b_fighter_status,
+    f.fight_order,
     f.round,
     f.time,
     f.method,
@@ -49,8 +52,7 @@ SELECT
     (EXTRACT(EPOCH FROM ('00:' || f.r_ground_control_time)::INTERVAL)::INT) AS "r_ground_control_time_seconds",
     f.b_ground_control_time,
     (EXTRACT(EPOCH FROM ('00:' || f.b_ground_control_time)::INTERVAL)::INT) AS "b_ground_control_time_seconds"
-FROM
-  {{ ref('stg_fights') }} f
-JOIN
-  {{ ref('stg_events') }} e
-ON f.event_id = e.id
+FROM {{ ref('stg_fights') }} f
+JOIN {{ ref('stg_events') }} e ON f.event_id = e.id
+JOIN {{ ref('stg_fighters') }} rf ON f.r_fighter_id = rf.id
+JOIN {{ ref('stg_fighters') }} bf ON f.b_fighter_id = bf.id
