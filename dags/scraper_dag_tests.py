@@ -1,5 +1,6 @@
 import datetime
 from airflow import DAG
+from airflow.models import Variable
 from airflow.providers.docker.operators.docker import DockerOperator
 from docker.types import Mount
 
@@ -62,7 +63,7 @@ dbt_transformations = DockerOperator(
   mounts=[
     Mount(
       target='/usr/app/dbt',
-      source='{{ var.value.DBT_PATH }}',
+      source=Variable.get('DBT_PATH'),
       type='bind',
     )
   ],
