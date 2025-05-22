@@ -26,7 +26,7 @@ scrape_fighters_and_events = DockerOperator(
   auto_remove='force',
   command='python ./scraper/ufc_fighters_and_events.py --recent',
   docker_url="unix://var/run/docker.sock",
-  network_mode="ufc-data-project-3_default",
+  network_mode="ufc-data-project_default",
   environment={
     'DB_URI': '{{ var.value.DB_URI }}'
   },
@@ -40,7 +40,7 @@ scrape_fights = DockerOperator(
   auto_remove='force',
   command='python ./scraper/ufc_fights.py --recent',
   docker_url="unix://var/run/docker.sock",
-  network_mode="ufc-data-project-3_default",
+  network_mode="ufc-data-project_default",
   environment={
     'DB_URI': '{{ var.value.DB_URI }}'
   },
