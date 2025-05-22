@@ -21,7 +21,7 @@ dag = DAG(
 
 scrape_fighters_and_events = DockerOperator(
   task_id='scrape_fighters_and_events',
-  image='ufc-data-project-3-ufc-scraper',
+  image='ufc-data-project-ufc-scraper',
   api_version='auto',
   auto_remove='force',
   command='python ./scraper/ufc_fighters_and_events.py --recent',
@@ -35,7 +35,7 @@ scrape_fighters_and_events = DockerOperator(
 
 scrape_fights = DockerOperator(
   task_id='scrape_fights',
-  image='ufc-data-project-3-ufc-scraper',
+  image='ufc-data-project-ufc-scraper',
   api_version='auto',
   auto_remove='force',
   command='python ./scraper/ufc_fights.py --recent',
