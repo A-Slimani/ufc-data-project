@@ -57,13 +57,13 @@ dbt_transformations = DockerOperator(
   image='ghcr.io/dbt-labs/dbt-postgres:1.9.0',
   api_version='auto',
   auto_remove='force',
-  command='run',
+  command='run --threads 1',
   docker_url="unix://var/run/docker.sock",  
   network_mode='ufc-data-project_default',
   mounts=[
     Mount(
       target='/usr/app/dbt',
-      source=Variable.get('DBT_PATH'),
+      source=Variable.get('DBT_DIR'),
       type='bind',
     )
   ],
