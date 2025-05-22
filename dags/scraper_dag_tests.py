@@ -63,7 +63,7 @@ dbt_transformations = DockerOperator(
   mounts=[
     Mount(
       target='/usr/app/dbt',
-      source=Variable.get('DBT_DIR'),
+      source=Variable.get('DBT_PATH'),
       type='bind',
     )
   ],
