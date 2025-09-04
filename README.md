@@ -11,4 +11,6 @@ Practice data engineering project using ufc data.
 2. Enter into the project folder and setup python environment with `python -m venv .venv`
 3. Install python dependecies with `pip install -r requirements.txt`
 4. Setup environment with docker run the command `docker-compose up -d`
-5. Enter airflow web ui and add db connection variable `DB_URI` `postgresql://ufc:ufc@ufc-db:5432/ufcdb`
+5. Ensure you have a dbt profile created read more here `https://docs.getdbt.com/docs/core/connect-data-platform/connection-profiles`
+6. Enter airflow web ui and add db connection variable `DB_URI` `your uri here`
+
