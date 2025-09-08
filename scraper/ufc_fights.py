@@ -11,9 +11,12 @@ import json
 import sys
 import os
 
+log_dir = os.getenv('LOG_DIR', 'logs')
+os.makedirs(log_dir, exist_ok=True)
+
 logging.basicConfig(
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
-    handlers=[logging.FileHandler(f"{os.getenv('LOG_DIR')}/ufc_fights.log"), logging.StreamHandler()],
+    handlers=[logging.FileHandler(f"{log_dir}/ufc_fights.log"), logging.StreamHandler()],
     level=logging.INFO
 )
 
@@ -194,7 +197,7 @@ async def main():
   semaphore = asyncio.Semaphore(32)
   pages = []
   if sys.argv[1] == "--missing":
-    pages = get_missing_page_list(f"{os.getenv('LOG_DIR')}/missing_fights.txt")
+    pages = get_missing_page_list(f"{log_dir}/missing_fights.txt")
   elif sys.argv[1] == "--recent": 
     try:
       weeks_from = int(sys.argv[2])
@@ -228,7 +231,7 @@ async def main():
 
   await process_tasks(tasks)
 
-  write_to_file(f"{os.getenv('LOG_DIR')}/missing_fights.txt", missing_ids)
+  write_to_file(f"{log_dir}/missing_fights.txt", missing_ids)
   
 if __name__ == '__main__':
   asyncio.run(main())  

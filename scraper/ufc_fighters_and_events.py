@@ -11,10 +11,12 @@ import json
 import sys
 import os
 
+log_dir = os.getenv('LOG_DIR', 'logs')
+os.makedirs(log_dir, exist_ok=True)
 
 logging.basicConfig(
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
-    handlers=[logging.FileHandler(f'{os.getenv('LOG_DIR')}/ufc_events_and_fighters.log'), logging.StreamHandler()],
+    handlers=[logging.FileHandler(f'{log_dir}/ufc_events_and_fighters.log'), logging.StreamHandler()],
     level=logging.INFO,
 )
 hishel_logger = logging.getLogger("hishel")
@@ -269,7 +271,7 @@ async def main():
   semaphore = asyncio.Semaphore(32)
   tasks = []
   if sys.argv[1] == "--missing":
-    pages = get_missing_page_list(f"{os.getenv('LOG_DIR')}/missing_events_and_fighters.txt")
+    pages = get_missing_page_list(f"{log_dir}/missing_events_and_fighters.txt")
     tasks = [get_data(page, semaphore, pool, 1) for page in pages]
   elif sys.argv[1] == '--recent':
     max_pages = get_recent_and_upcoming_events()
@@ -296,7 +298,7 @@ async def main():
 
   await asyncio.gather(*tasks)
   # store all the missing pages into a txt
-  write_to_file(f"{os.getenv('LOG_DIR')}/missing_events_and_fighters.txt", missing_ids)
+  write_to_file(f"{log_dir}/missing_events_and_fighters.txt", missing_ids)
 
 
 if __name__ == '__main__':

@@ -1,114 +1,15 @@
 services:
-  ufc-db:
-    image: postgres:17.4
-    container_name: ufc-db 
-    environment:
-      POSTGRES_USER: ufc
-      POSTGRES_PASSWORD: ufc 
-      POSTGRES_DB: ufcdb
-    ports:
-      - "5432:5432"
-    volumes:
-      - ufcdb_data:/var/lib/postgresql/data
-  
   ufc-scraper:
     container_name: ufc-scraper
     build:
       context: .
       dockerfile: Dockerfiles/scraper.Dockerfile
-    depends_on:
-      - ufc-db
     volumes:
       - .:/app
+    env_file:
+      - .env
     environment:
-      DB_URI: postgresql://ufc:ufc@ufc-db:5432/ufcdb
-  
-  airflow-db:
-    image: postgres:17.4
-    container_name: airflow-db
-    environment:
-      POSTGRES_USER: airflow
-      POSTGRES_PASSWORD: airflow
-      POSTGRES_DB: airflowdb
-    volumes:
-      - airflowdb_data:/var/lib/postgresql/data
+      DB_URI: ${DB_URI} 
+      LOG_DIR: ${LOG_DIR} 
+    command: python ./scraper/ufc_fights.py --build 
 
-  init-airflow:
-    image: apache/airflow:2.10.5
-    depends_on:
-     - airflow-db
-    environment:
-      AIRFLOW__CORE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@airflow-db/airflowdb
-    command: >
-      bash -c "airflow db init && airflow users create --username admin --password admin --firstname admin --lastname admin --role Admin --email admin@example.com"
-
-  airflow-webserver:
-    build:
-      context: .
-      dockerfile: Dockerfiles/airflow.Dockerfile
-    user: root
-    depends_on:
-      - airflow-db 
-      - ufc-db
-    volumes:
-      - ./dags:/opt/airflow/dags
-      - ./logs:/opt/airflow/logs
-      - ./plugins:/opt/airflow/plugins
-      - /var/run/docker.sock:/var/run/docker.sock
-    ports:
-      - "8080:8080"
-    environment:
-      AIRFLOW__CORE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@airflow-db/airflowdb
-      AIRFLOW__CORE__LOAD_EXAMPLES: "false"
-      AIRFLOW__WEBSERVER__SECRET_KEY: "skibidi"
-    restart: always
-    command: airflow webserver
-
-  airflow-scheduler:
-    build:
-      context: . 
-      dockerfile: Dockerfiles/airflow.Dockerfile 
-    user: root
-    depends_on:
-      - airflow-db
-      - ufc-db
-    volumes:
-      - ./dags:/opt/airflow/dags
-      - ./logs:/opt/airflow/logs
-      - ./plugins:/opt/airflow/plugins
-      - /var/run/docker.sock:/var/run/docker.sock
-    environment:
-      AIRFLOW__CORE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@airflow-db/airflowdb
-      AIRFLOW__CORE__LOAD_EXAMPLES: "false"
-      AIRFLOW__WEBSERVER__SECRET_KEY: "skibidi"
-    restart: always
-    command: airflow scheduler
-
-  ## NOT USING APACHE SUPERSET ANYMORE 
-  # apache-superset:
-  #   image: apache/superset
-  #   user: root
-  #   environment:
-  #     - SUPERSET_SECRET_KEY=skibidi
-  #     - POSTGRES_DB=superset
-  #     - POSTGRES_USER=superset
-  #     - POSTGRES_PASSWORD=superset
-  #   ports:
-  #     - "8088:8088"
-  #   volumes:
-  #     - ./superset_home:/app/superset_home
-  #   depends_on:
-  #     - ufc-db
-  
-  dbt:
-    image: ghcr.io/dbt-labs/dbt-postgres:1.9.0
-    container_name: dbt
-    command: >
-      run --profiles-dir /usr/app/dbt --target cloud
-    volumes:
-      - ./ufcdbt:/usr/app/dbt
-
-
-volumes:
-  ufcdb_data:
-  airflowdb_data:
