@@ -1,15 +1,15 @@
 WITH combined_tables AS (
   SELECT
-    f.r_fighter_id AS "id",
-    f.r_fighter_name AS "full_name",
+    r_fighter_id AS "id",
+    r_fighter_name AS "full_name",
     fight_date
-  FROM {{ ref('stg_fights') }}
+  FROM {{ ref('stg_fights') }} f
   UNION
   SELECT
-    f.b_fighter_id AS "id",
-    f.b_fighter_name AS "full_name",
+    b_fighter_id AS "id",
+    b_fighter_name AS "full_name",
     fight_date
-  FROM {{ ref('stg_fights') }}
+  FROM {{ ref('stg_fights') }} 
 )
 SELECT
   id,
