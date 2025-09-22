@@ -63,7 +63,7 @@ dbt_transformations = DockerOperator(
   mounts=[
     Mount(
       target='/usr/app/dbt',
-      source=Variable.get('DBT_PATH'),
+      source='/Users/aboud/Programming/ufc-data-project/ufcdbt',
       type='bind',
     )
   ],
