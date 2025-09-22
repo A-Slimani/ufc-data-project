@@ -56,3 +56,9 @@ FROM {{ ref('stg_fights') }} f
 JOIN {{ ref('stg_events') }} e ON f.event_id = e.id
 JOIN {{ ref('stg_fighters') }} rf ON f.r_fighter_id = rf.id
 JOIN {{ ref('stg_fighters') }} bf ON f.b_fighter_id = bf.id
+WHERE 
+    f.fight_date < NOW() 
+    AND 
+    f.r_fighter_status IS NOT NULL 
+    AND
+    f.b_fighter_status IS NOT NULL
