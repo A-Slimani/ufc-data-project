@@ -2,6 +2,7 @@ import datetime
 from airflow import DAG
 from airflow.providers.docker.operators.docker import DockerOperator
 from docker.types import Mount
+from docker.types import Variable 
 
 default_args = {
   'owner': 'airflow',
@@ -58,7 +59,7 @@ dbt_transformations = DockerOperator(
   mounts=[
     Mount(
       target='/usr/app/dbt',
-      source='/Users/aboud/Programming/ufc-data-project/ufcdbt',
+      source=Variable.get('DBT_PATH'),
       type='bind',
     )
   ],

@@ -1,24 +1,20 @@
-select
-	r_fighter_id as "id",
-	r_fighter_name as "name",
-	fight_date 
-from dbt_schema.fact_fights
-where
-	fight_date < CURRENT_DATE
-	and
-	fight_date > CURRENT_DATE - INTERVAL'3 years'
-	and
-	r_fighter_status is not null
-union
-select
-	b_fighter_id as "id",
-	b_fighter_name as "name",
-	fight_date
-from dbt_schema.fact_fights
-where 
-	fight_date < CURRENT_DATE
-	and
-	fight_date > CURRENT_DATE - INTERVAL'3 years'
-	and
-	b_fighter_status is not null
-order by fight_date 
+WITH combined_records AS (
+	SELECT
+		r_fighter_id AS "id",
+		r_fighter_name AS "name",
+		fight_date
+	FROM dbt_schema.fact_fights
+	UNION
+	SELECT
+		b_fighter_id AS "id",
+		b_fighter_name AS "name",
+		fight_date
+	FROM dbt_schema.fact_fights
+)
+SELECT 
+	id, 
+	name, 
+	MAX(fight_date) AS "last_fought" 
+FROM combined_records
+GROUP BY id, name
+ORDER BY MAX(fight_date) DESC
