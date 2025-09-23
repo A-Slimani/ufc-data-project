@@ -12,6 +12,7 @@ SELECT
   trains_at_city,
   trains_at_state,
   trains_at_country,
+  last_active,
   total_fights,
   total_wins,
   total_losses,

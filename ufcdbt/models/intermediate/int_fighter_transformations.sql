@@ -15,6 +15,7 @@ SELECT
   f.weight_class_id,
   f.weight_class_description,
   f.weight_class_order,
+  a.last_active,
   (f.wins + f.losses + f.draws) AS "total_fights",
   f.wins AS "total_wins",
   f.losses AS "total_losses",
@@ -50,3 +51,4 @@ FROM {{ ref('int_fighter_ufc_stats') }} p
 LEFT JOIN {{ ref('stg_fighters') }} f ON f.id = p.fighter_id
 LEFT JOIN {{ ref('int_fighter_ufc_wins_by') }} b ON p.fighter_id = b.fighter_id
 LEFT JOIN {{ ref('int_fighter_fight_stats') }} fs ON fs.fighter_id = f.id 
+lEFT JOIN {{ ref('int_fighter_is_active')}} a ON p.fighter_id = a.id
