@@ -18,3 +18,5 @@ Can fight outcomes be predicted using attributes like fighter statistics, fight 
 How does fighter popularity or ranking correlate with fight outcomes or methods of victory?
 
 What are the common characteristics of fighters who frequently win by decision versus those who win by knockout or submission?
+
+At what age does a fighter have the most success?

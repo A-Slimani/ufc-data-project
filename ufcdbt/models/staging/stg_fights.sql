@@ -43,3 +43,9 @@ SELECT
   f.b_fight_stats->>'GroundControlTime' AS b_ground_control_time
 FROM
   {{ source('database', 'raw_fights') }} f
+LEFT JOIN
+  {{ source('database', 'raw_events') }} e
+ON 
+  f.event_id = e.id
+WHERE
+  CAST(organisation_data ->> 'OrganizationId' AS INTEGER) = 1

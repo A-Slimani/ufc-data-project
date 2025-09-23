@@ -1,20 +1,17 @@
 WITH combined_records AS (
 	SELECT
 		r_fighter_id AS "id",
-		r_fighter_name AS "name",
 		fight_date
-	FROM dbt_schema.fact_fights
-	UNION
+	FROM dbt_schema.stg_fights
+	UNION ALL
 	SELECT
 		b_fighter_id AS "id",
-		b_fighter_name AS "name",
 		fight_date
-	FROM dbt_schema.fact_fights
+	FROM dbt_schema.stg_fights
 )
 SELECT 
 	id, 
-	name, 
-	MAX(fight_date) AS "last_fought" 
+	MAX(fight_date) AS "last_active" 
 FROM combined_records
-GROUP BY id, name
+GROUP BY id 
 ORDER BY MAX(fight_date) DESC

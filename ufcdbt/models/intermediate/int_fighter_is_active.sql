@@ -1,16 +1,16 @@
 WITH combined_tables AS (
   SELECT
-    r_fighter_id AS "id",
+    r_fighter_id AS "fighter_id",
     fight_date
-  FROM {{ ref('stg_fights') }} f
-  UNION
+  FROM {{ ref('int_fights_transformations') }} f
+  UNION ALL
   SELECT
-    b_fighter_id AS "id",
+    b_fighter_id AS "fighter_id",
     fight_date
-  FROM {{ ref('stg_fights') }} 
+  FROM {{ ref('int_fights_transformations') }} 
 )
 SELECT
-  id,
+  fighter_id,
   MAX(fight_date) AS "last_active" 
-FROM {{ ref('stg_fights') }}
-GROUP BY id 
+FROM combined_tables
+GROUP BY fighter_id 
