@@ -3,7 +3,6 @@ from airflow import DAG
 from airflow.models import Variable
 from airflow.providers.docker.operators.docker import DockerOperator
 from docker.types import Mount
-from docker.types import Variable
 
 default_args = {
   'owner': 'airflow',
@@ -23,7 +22,7 @@ dag = DAG(
 
 scrape_fighters_and_events = DockerOperator(
   task_id='scrape_fighters_and_events',
-  image='ufc-data-project-ufc-scraper',
+  image='ufc-data-project_ufc-scraper',
   api_version='auto',
   auto_remove='force',
   command='python ./scraper/ufc_fighters_and_events.py --test',
@@ -39,7 +38,7 @@ scrape_fighters_and_events = DockerOperator(
 
 scrape_fights = DockerOperator(
   task_id='scrape_fights',
-  image='ufc-data-project-ufc-scraper',
+  image='ufc-data-project_ufc-scraper',
   api_version='auto',
   auto_remove='force',
   command='python ./scraper/ufc_fights.py --test',
