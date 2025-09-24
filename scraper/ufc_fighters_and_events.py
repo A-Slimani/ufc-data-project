@@ -108,6 +108,7 @@ async def get_data(page, semaphore, pool, sleep_time):
                 "losses": fighter["Record"]["Losses"],
                 "draws": fighter["Record"]["Draws"],
                 "age": fighter["Age"],
+                "DOB": fighter["DOB"],
                 "height": fighter["Height"],
                 "stance": fighter["Stance"],
                 "reach": fighter["Reach"],
@@ -135,7 +136,7 @@ async def get_data(page, semaphore, pool, sleep_time):
                     $6, $7, $8, $9, $10, 
                     $11, $12, $13, $14, $15, 
                     $16, $17, $18, $19, $20,
-                    $21, CURRENT_TIMESTAMP
+                    $21, $22, CURRENT_TIMESTAMP
                   )
                   ON CONFLICT (id) DO UPDATE SET
                     id = EXCLUDED.id,
@@ -154,6 +155,7 @@ async def get_data(page, semaphore, pool, sleep_time):
                     losses = EXCLUDED.losses,
                     draws = EXCLUDED.draws,
                     age = EXCLUDED.age,
+                    DOB = EXCLUDED.DOB,
                     height = EXCLUDED.height,
                     stance = EXCLUDED.stance,
                     reach = EXCLUDED.reach,
@@ -177,6 +179,7 @@ async def get_data(page, semaphore, pool, sleep_time):
                   fighter_data["losses"],
                   fighter_data["draws"],
                   fighter_data["age"],
+                  fighter_data["DOB"],
                   fighter_data["height"],
                   fighter_data["stance"],
                   fighter_data["reach"],
@@ -236,6 +239,7 @@ def create_fighter_table():
         losses INTEGER,
         draws INTEGER,
         age INTEGER,
+        DOB DATE,
         height INTEGER,
         stance TEXT,
         reach INTEGER,
