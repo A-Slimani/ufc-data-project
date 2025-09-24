@@ -179,7 +179,7 @@ async def get_data(page, semaphore, pool, sleep_time):
                   fighter_data["losses"],
                   fighter_data["draws"],
                   fighter_data["age"],
-                  fighter_data["DOB"],
+                  fighter_data["dob"],
                   fighter_data["height"],
                   fighter_data["stance"],
                   fighter_data["reach"],
