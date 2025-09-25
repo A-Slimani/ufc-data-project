@@ -1,5 +1,6 @@
 from extensions.missing_pages import get_missing_page_list 
 from extensions.missing_pages import write_to_file
+from datetime import datetime
 from pathlib import Path
 import psycopg2
 import logging
@@ -108,7 +109,7 @@ async def get_data(page, semaphore, pool, sleep_time):
                 "losses": fighter["Record"]["Losses"],
                 "draws": fighter["Record"]["Draws"],
                 "age": fighter["Age"],
-                "dob": fighter["DOB"],
+                "dob": datetime.strptime(fighter["DOB"], "%Y-%m-%d").date() if fighter["DOB"] else None,
                 "height": fighter["Height"],
                 "stance": fighter["Stance"],
                 "reach": fighter["Reach"],
@@ -136,7 +137,7 @@ async def get_data(page, semaphore, pool, sleep_time):
                     $6, $7, $8, $9, $10, 
                     $11, $12, $13, $14, $15, 
                     $16, $17, $18, $19, $20,
-                    $21, $22, CURRENT_TIMESTAMP
+                    $21, $22, CURRENT_TIMESTAMP 
                   )
                   ON CONFLICT (id) DO UPDATE SET
                     id = EXCLUDED.id,
@@ -269,6 +270,8 @@ async def main():
     min_size=1,
     max_size=16
   )
+
+  print(os.getenv("DB_URI"))
 
   semaphore = asyncio.Semaphore(32)
   tasks = []
