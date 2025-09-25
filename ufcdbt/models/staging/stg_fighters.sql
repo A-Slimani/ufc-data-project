@@ -5,7 +5,7 @@ SELECT
   (first_name || ' '  || last_name) AS full_name,
   nickname AS "nick_name",
   age,
-  DOB,
+  do,
   hometown_city,
   hometown_state,
   hometown_country,
