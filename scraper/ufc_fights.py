@@ -50,10 +50,11 @@ async def get_fight_data(page, semaphore, pool, sleep_time):
           r_fighter_status = fight["Fighters"][0]["Outcome"]["Outcome"]
           b_fighter_status = fight["Fighters"][1]["Outcome"]["Outcome"]
           fight_order = fight["FightOrder"]
-          round = fight["Result"]["EndingRound"]
+          ending_round = fight["Result"]["EndingRound"]
           time = fight["Result"]["EndingTime"]
           method = fight["Result"]["Method"]
           bout_weight = fight["WeightClass"]["Description"]
+          bout_rounds = fight["RuleSet"]["PossibleRounds"]
           url_link = url
           start_time = fight["Event"]["StartTime"]
           fight_stats = fight["FightStats"]
@@ -72,7 +73,9 @@ async def get_fight_data(page, semaphore, pool, sleep_time):
                 id, event_id, start_time, r_fighter_id, b_fighter_id, 
                 r_fighter_status, b_fighter_status, fight_order, round, time, 
                 method, bout_weight, r_fight_stats, b_fight_stats, url, last_updated_at
-              ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, CURRENT_TIMESTAMP)
+              ) VALUES ($1, $2, $3, $4, $5, $6, $7, 
+                $8, $9, $10, $11, $12, $13, $14, $15, $16, CURRENT_TIMESTAMP
+              )
               ON CONFLICT (id) DO UPDATE SET
                 event_id = EXCLUDED.event_id,
                 start_time = EXCLUDED.start_time,
@@ -81,18 +84,19 @@ async def get_fight_data(page, semaphore, pool, sleep_time):
                 r_fighter_status = EXCLUDED.r_fighter_status,
                 b_fighter_status = EXCLUDED.b_fighter_status,
                 fight_order = EXCLUDED.fight_order,
-                round = EXCLUDED.round,
+                ending_round = EXCLUDED.round,
                 time = EXCLUDED.time,
                 method = EXCLUDED.method,
                 bout_weight = EXCLUDED.bout_weight,
+                bout_rounds = EXCLUDED.bout_rounds,
                 r_fight_stats = EXCLUDED.r_fight_stats,
                 b_fight_stats = EXCLUDED.b_fight_stats,
                 url = EXCLUDED.url,
                 last_updated_at = CURRENT_TIMESTAMP
               """,
               id, event_id, start_time, r_fighter_id, b_fighter_id,
-              r_fighter_status, b_fighter_status, fight_order, round, time, 
-              method, bout_weight, r_fight_stats, b_fight_stats, url_link
+              r_fighter_status, b_fighter_status, fight_order, ending_round, time, 
+              method, bout_weight, bout_rounds, r_fight_stats, b_fight_stats, url_link
               )
           return (True, "Success")
         else:
@@ -119,10 +123,11 @@ def create_fight_table():
     b_fighter_id INTEGER REFERENCES raw_fighters(id) ON DELETE CASCADE,
     b_fighter_status TEXT,
     fight_order INTEGER,
-    round INTEGER,
+    round_ending INTEGER,
     time TEXT,
     method TEXT,
     bout_weight TEXT,
+    bout_rounds INTEGER,
     r_fight_stats JSONB,
     b_fight_stats JSONB,
     url TEXT,
