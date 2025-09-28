@@ -30,7 +30,8 @@ scrape_fighters_and_events = DockerOperator(
   docker_url="unix://var/run/docker.sock",
   network_mode="ufc-data-project_default",
   environment={
-    'DB_URI': '{{ var.value.DB_URI }}'
+    'DB_URI': '{{ var.value.DB_URI }}',
+    'LOG_DIR': '{{ var.value.LOG_DIR }}'
   },
   dag=dag
 )
@@ -44,7 +45,8 @@ scrape_fights = DockerOperator(
   docker_url="unix://var/run/docker.sock",
   network_mode="ufc-data-project_default",
   environment={
-    'DB_URI': '{{ var.value.DB_URI }}'
+    'DB_URI': '{{ var.value.DB_URI }}',
+    'LOG_DIR': '{{ var.value.LOG_DIR }}'
   },
   dag=dag
 )
