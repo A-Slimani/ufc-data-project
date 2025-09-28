@@ -71,8 +71,8 @@ async def get_fight_data(page, semaphore, pool, sleep_time):
               """
               INSERT INTO raw_fights (
                 id, event_id, start_time, r_fighter_id, b_fighter_id, 
-                r_fighter_status, b_fighter_status, fight_order, round, time, 
-                method, bout_weight, r_fight_stats, b_fight_stats, url, last_updated_at
+                r_fighter_status, b_fighter_status, fight_order, ending_round, time, 
+                method, bout_weight, bout_rounds, r_fight_stats, b_fight_stats, url, last_updated_at
               ) VALUES ($1, $2, $3, $4, $5, $6, $7, 
                 $8, $9, $10, $11, $12, $13, $14, $15, $16, CURRENT_TIMESTAMP
               )
