@@ -16,7 +16,7 @@ dag = DAG(
   'scrape_ufc_recent',
   default_args=default_args,
   description='scrape recent ufc events',
-  schedule_interval="0 8 * * 0",
+  schedule_interval="0 20 * * 0",
   start_date=datetime.datetime(2025, 1, 1, tzinfo=pendulum.timezone("Australia/Sydney")),
   catchup=False
 )
