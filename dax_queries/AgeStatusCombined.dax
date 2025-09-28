@@ -1,0 +1,13 @@
+AgeStatus = 
+UNION(
+    SELECTCOLUMNS(
+        'fact_fights',
+        "age", 'fact_fights'[r_age],
+        "status", 'fact_fights'[r_fighter_status]
+    ),
+    SELECTCOLUMNS(
+        'fact_fights',
+        "age", 'fact_fights'[b_age],
+        "status", 'fact_fights'[b_fighter_status]
+    )
+)

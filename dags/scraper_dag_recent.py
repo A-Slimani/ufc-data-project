@@ -1,4 +1,5 @@
 import datetime
+import pendulum
 from airflow import DAG
 from airflow.models import Variable 
 from airflow.providers.docker.operators.docker import DockerOperator
@@ -15,8 +16,8 @@ dag = DAG(
   'scrape_ufc_recent',
   default_args=default_args,
   description='scrape recent ufc events',
-  schedule_interval=None,
-  start_date=datetime.datetime(2025, 1, 1),
+  schedule_interval="0 8 * * 0",
+  start_date=datetime.datetime(2025, 1, 1, tzinfo=pendulum.timezone("Australia/Sydney")),
   catchup=False
 )
 
@@ -53,7 +54,7 @@ dbt_transformations = DockerOperator(
   image='ghcr.io/dbt-labs/dbt-postgres:1.9.0',
   api_version='auto',
   auto_remove='force',
-  command='run --profiles-dir /usr/app/dbt --target cloud',
+  command='run --profiles-dir /usr/app/dbt --target dev',
   docker_url="unix://var/run/docker.sock",  
   network_mode='ufc-data-project_default',
   mounts=[

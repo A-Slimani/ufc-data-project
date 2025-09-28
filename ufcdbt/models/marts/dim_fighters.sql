@@ -5,6 +5,7 @@ SELECT
   last_name,
   nick_name,
   age,
+  dob,
   weight_class_id,
   weight_class_description,
   hometown_city,

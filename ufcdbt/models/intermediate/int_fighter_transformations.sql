@@ -5,6 +5,7 @@ SELECT
   f.last_name,
   f.nick_name,
   f.age,
+  f.dob,
   f.hometown_city,
   f.hometown_state,
   f.hometown_country,
