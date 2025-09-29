@@ -123,7 +123,7 @@ def create_fight_table():
     b_fighter_id INTEGER REFERENCES raw_fighters(id) ON DELETE CASCADE,
     b_fighter_status TEXT,
     fight_order INTEGER,
-    ending_rounds INTEGER,
+    ending_round INTEGER,
     time TEXT,
     method TEXT,
     bout_weight TEXT,
