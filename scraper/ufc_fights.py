@@ -84,7 +84,7 @@ async def get_fight_data(page, semaphore, pool, sleep_time):
                 r_fighter_status = EXCLUDED.r_fighter_status,
                 b_fighter_status = EXCLUDED.b_fighter_status,
                 fight_order = EXCLUDED.fight_order,
-                ending_round = EXCLUDED.round,
+                ending_round = EXCLUDED.ending_round,
                 time = EXCLUDED.time,
                 method = EXCLUDED.method,
                 bout_weight = EXCLUDED.bout_weight,
