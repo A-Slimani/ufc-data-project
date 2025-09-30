@@ -1,7 +1,7 @@
 # End to End UFC data pipeline project
 
 Practice data engineering project using ufc data.
-[Here is a write up of the project and it's learnings](https://innovative-walnut-cd4.notion.site/Data-Pipeline-Project-1b94bb5188cb80c6bcf3d86bf6042a9e)
+[Here is a write up of the project and it's learnings](https://www.notion.so/abdullahslimani-data-engineering-project/Data-Engineering-Project-2784bb5188cb80a1b5a5ce22d45db370)
 
 ## Pre setup
 - Ensure you have docker installed
