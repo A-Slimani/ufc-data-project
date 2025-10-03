@@ -104,12 +104,14 @@ models:
         tests:
           - not_null
           - accepted_values:
-              arguments:
-                values: [0, 1, 2, 3]
+              values: [0, 1, 2, 3]
       - name: bout_weight
         description: "Weight class of the fight"
         tests:
           - not_null
+          - relationships:
+              to: ref('accepted_weight_classes')
+              field: weight_classes
       - name: bout_weight_id
         description: "Weight class ID of the fight"
         tests:

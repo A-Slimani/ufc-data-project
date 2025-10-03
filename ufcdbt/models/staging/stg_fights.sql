@@ -12,7 +12,7 @@ SELECT
   {{ fight_result_type('f.method') }} AS "method_type",
   f.bout_weight,
   {{ generate_weight_class_id('f.bout_weight') }} AS "bout_weight_id",
-  f.bout_rounds,
+  {{ bout_rounds_conversion('f.bout_rounds') }} AS "bout_rounds",
   f.url,
   f.start_time::timestamp::date AS "fight_date",
   f.last_updated_at,

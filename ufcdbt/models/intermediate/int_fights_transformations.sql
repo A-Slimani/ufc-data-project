@@ -15,7 +15,7 @@ SELECT
     f.method,
     f.method_type,
     f.bout_weight,
-    {{ generate_weight_class_id('f.bout_weight') }} AS "bout_weight_id",
+    f.bout_weight_id,
     f.bout_rounds,
     f.url,
     f.fight_date,
