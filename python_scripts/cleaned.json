@@ -1,0 +1,376 @@
+[
+  {
+    "EventName": "UFC on FX: Alves vs Kampmann",
+    "FightDate": "2012-03-02T23:00Z",
+    "b_fighter": "Joseph, Benavidez",
+    "r_fighter": "Yasuhiro, Urushitani",
+    "AccoladeData": ""
+  },
+  {
+    "EventName": "UFC on FX: Alves vs Kampmann",
+    "FightDate": "2012-03-02T23:00Z",
+    "b_fighter": "Demetrious, Johnson",
+    "r_fighter": "Ian, McCall",
+    "AccoladeData": ""
+  },
+  {
+    "EventName": "UFC 147: Silva vs Franklin 2",
+    "FightDate": "2012-06-23T22:00Z",
+    "b_fighter": "Cezar, Ferreira",
+    "r_fighter": "Sergio, Moraes",
+    "AccoladeData": {
+      "Type": "Tournament",
+      "Name": "Ultimate Fighter Brazil 1 Middleweight Tournament Title"
+    }
+  },
+  {
+    "EventName": "UFC 147: Silva vs Franklin 2",
+    "FightDate": "2012-06-23T22:00Z",
+    "b_fighter": "Godofredo, Pepey",
+    "r_fighter": "Rony, Jason",
+    "AccoladeData": {
+      "Type": "Tournament",
+      "Name": "Ultimate Fighter Brazil 1 Featherweight Tournament Title"
+    }
+  },
+  {
+    "EventName": "The Ultimate Fighter: Team Carwin vs. Team Nelson Finale",
+    "FightDate": "2012-12-15T22:30Z",
+    "b_fighter": "Colton, Smith",
+    "r_fighter": "Mike, Ricci",
+    "AccoladeData": {
+      "Type": "Tournament",
+      "Name": "Ultimate Fighter 16 Welterweight Tournament Title"
+    }
+  },
+  {
+    "EventName": "UFC Fight Night: Bisping vs Le",
+    "FightDate": "2014-08-23T10:30Z",
+    "b_fighter": "Guangyou, Ning",
+    "r_fighter": "Jianping, Yang",
+    "AccoladeData": {
+      "Type": "Tournament",
+      "Name": "Ultimate Fighter China Featherweight Tournament Title"
+    }
+  },
+  {
+    "EventName": "The Ultimate Fighter: Team Edgar vs. Team Penn Finale",
+    "FightDate": "2014-07-06T22:00Z",
+    "b_fighter": "Dhiego, Lima",
+    "r_fighter": "Eddie, Gordon",
+    "AccoladeData": {
+      "Type": "Tournament",
+      "Name": "Ultimate Fighter 19 Middleweight Tournament Title"
+    }
+  },
+  {
+    "EventName": "The Ultimate Fighter: Team Edgar vs. Team Penn Finale",
+    "FightDate": "2014-07-06T22:00Z",
+    "b_fighter": "Corey, Anderson",
+    "r_fighter": "Matt, Van Buren",
+    "AccoladeData": {
+      "Type": "Tournament",
+      "Name": "Ultimate Fighter 19 Light Heavyweight Tournament Title"
+    }
+  },
+  {
+    "EventName": "The Ultimate Fighter: American Top Team vs. Blackzilians Finale",
+    "FightDate": "2015-07-12T22:30Z",
+    "b_fighter": "Kamaru, Usman",
+    "r_fighter": "Hayder, Hassan",
+    "AccoladeData": {
+      "Type": "Tournament",
+      "Name": "Ultimate Fighter 21 Welterweight Tournament Title"
+    }
+  },
+  {
+    "EventName": "UFC 190: Rousey vs Correia",
+    "FightDate": "2015-08-01T23:00Z",
+    "b_fighter": "Glaico, Franca Moreira",
+    "r_fighter": "Fernando, Bruno",
+    "AccoladeData": {
+      "Type": "Tournament",
+      "Name": "Ultimate Fighter Brazil 4 Lightweight Tournament Title"
+    }
+  },
+  {
+    "EventName": "UFC 190: Rousey vs Correia",
+    "FightDate": "2015-08-01T23:00Z",
+    "b_fighter": "Reginaldo, Vieira",
+    "r_fighter": "Dileno, Lopes",
+    "AccoladeData": {
+      "Type": "Tournament",
+      "Name": "Ultimate Fighter Brazil 4 Bantamweight Tournament Title"
+    }
+  },
+  {
+    "EventName": "UFC Fight Night: Magny vs Gastelum",
+    "FightDate": "2015-11-21T23:30Z",
+    "b_fighter": "Erick, Montano",
+    "r_fighter": "Enrique, Marin",
+    "AccoladeData": {
+      "Type": "Tournament",
+      "Name": "Ultimate Fighter Latin America 2 Welterweight Tournament Title"
+    }
+  },
+  {
+    "EventName": "UFC Fight Night: Magny vs Gastelum",
+    "FightDate": "2015-11-21T23:30Z",
+    "b_fighter": "Horacio, Gutierrez",
+    "r_fighter": "Enrique, Barzola",
+    "AccoladeData": {
+      "Type": "Tournament",
+      "Name": "Ultimate Fighter Latin America 2 Lightweight Tournament Title"
+    }
+  },
+  {
+    "EventName": "The Ultimate Fighter: Team McGregor vs. Team Faber Finale",
+    "FightDate": "2015-12-12T01:00Z",
+    "b_fighter": "Artem, Lobov",
+    "r_fighter": "Ryan, Hall",
+    "AccoladeData": {
+      "Type": "Tournament",
+      "Name": "Ultimate Fighter 22 Lightweight Tournament Title"
+    }
+  },
+  {
+    "EventName": "The Ultimate Fighter: Team Joanna vs. Team Cláudia Finale",
+    "FightDate": "2016-07-08T23:00Z",
+    "b_fighter": "Tatiana, Suarez",
+    "r_fighter": "Amanda, Cooper",
+    "AccoladeData": {
+      "Type": "Tournament",
+      "Name": "Ultimate Fighter 23 Women's Strawweight Tournament Title"
+    }
+  },
+  {
+    "EventName": "The Ultimate Fighter: Team Joanna vs. Team Cláudia Finale",
+    "FightDate": "2016-07-08T23:00Z",
+    "b_fighter": "Andrew, Sanchez",
+    "r_fighter": "Khalil, Rountree Jr.",
+    "AccoladeData": {
+      "Type": "Tournament",
+      "Name": "Ultimate Fighter 23 Light Heavyweight Tournament Title"
+    }
+  },
+  {
+    "EventName": "UFC Fight Night: Dos Anjos vs. Ferguson",
+    "FightDate": "2016-11-05T22:30Z",
+    "b_fighter": "Martin, Bravo",
+    "r_fighter": "Claudio, Puelles",
+    "AccoladeData": {
+      "Type": "Tournament",
+      "Name": "Ultimate Fighter Latin America 3 Lightweight Tournament Title"
+    }
+  },
+  {
+    "EventName": "The Ultimate Fighter: Redemption Finale",
+    "FightDate": "2017-07-07T22:30Z",
+    "b_fighter": "Dhiego, Lima",
+    "r_fighter": "Jesse, Taylor",
+    "AccoladeData": {
+      "Type": "Tournament",
+      "Name": "Ultimate Fighter 25 Welterweight Tournament Title"
+    }
+  },
+  {
+    "EventName": "The Ultimate Fighter: Undefeated Finale",
+    "FightDate": "2018-07-06T23:00Z",
+    "b_fighter": "Jay, Cucciniello",
+    "r_fighter": "Brad, Katona",
+    "AccoladeData": {
+      "Type": "Tournament",
+      "Name": "Ultimate Fighter 27 Featherweight Tournament Title"
+    }
+  },
+  {
+    "EventName": "The Ultimate Fighter: Undefeated Finale",
+    "FightDate": "2018-07-06T23:00Z",
+    "b_fighter": "Michael, Trizano",
+    "r_fighter": "Joe, Giannetti",
+    "AccoladeData": {
+      "Type": "Tournament",
+      "Name": "Ultimate Fighter 27 Lightweight Tournament Title"
+    }
+  },
+  {
+    "EventName": "The Ultimate Fighter: Heavy Hitters Finale",
+    "FightDate": "2018-11-30T23:30Z",
+    "b_fighter": "Juan, Espino",
+    "r_fighter": "Justin, Frazier",
+    "AccoladeData": {
+      "Type": "Tournament",
+      "Name": "Ultimate Fighter 28 Heavyweight Tournament Title"
+    }
+  },
+  {
+    "EventName": "The Ultimate Fighter: Heavy Hitters Finale",
+    "FightDate": "2018-11-30T23:30Z",
+    "b_fighter": "Pannie, Kianzad",
+    "r_fighter": "Macy, Chiasson",
+    "AccoladeData": {
+      "Type": "Tournament",
+      "Name": "Ultimate Fighter 28 Women's Featherweight Tournament Title"
+    }
+  },
+  {
+    "EventName": "UFC Fight Night: Barboza vs. Chikadze",
+    "FightDate": "2021-08-28T23:00Z",
+    "b_fighter": "Ricky, Turcios",
+    "r_fighter": "Brady, Hiestand",
+    "AccoladeData": ""
+  },
+  {
+    "EventName": "UFC Fight Night: Barboza vs. Chikadze",
+    "FightDate": "2021-08-28T23:00Z",
+    "b_fighter": "Bryan, Battle",
+    "r_fighter": "Gilbert, Urbina",
+    "AccoladeData": ""
+  },
+  {
+    "EventName": "UFC Fight Night: Lewis vs. Spivac",
+    "FightDate": "2023-02-05T03:00Z",
+    "b_fighter": "Toshiomi, Kazama",
+    "r_fighter": "Rinya, Nakamura",
+    "AccoladeData": {
+      "Type": "Tournament",
+      "Name": "Road To UFC 1 Bantamweight Tournament Title"
+    }
+  },
+  {
+    "EventName": "UFC Fight Night: Santos vs. Hill",
+    "FightDate": "2022-08-06T23:30Z",
+    "b_fighter": "Mohammed, Usman",
+    "r_fighter": "Zac, Pauga",
+    "AccoladeData": ""
+  },
+  {
+    "EventName": "UFC Fight Night: Santos vs. Hill",
+    "FightDate": "2022-08-06T23:30Z",
+    "b_fighter": "Brogan, Walker",
+    "r_fighter": "Juliana, Miller",
+    "AccoladeData": ""
+  },
+  {
+    "EventName": "UFC Fight Night: Lewis vs. Spivac",
+    "FightDate": "2023-02-05T03:00Z",
+    "b_fighter": "Jeka, Saragih",
+    "r_fighter": "Anshul, Jubli",
+    "AccoladeData": {
+      "Type": "Tournament",
+      "Name": "Road To UFC 1 Lightweight Tournament Title"
+    }
+  },
+  {
+    "EventName": "UFC Fight Night: Lewis vs. Spivac",
+    "FightDate": "2023-02-05T03:00Z",
+    "b_fighter": "SeungGuk, Choi",
+    "r_fighter": "HyunSung, Park",
+    "AccoladeData": {
+      "Type": "Tournament",
+      "Name": "Road to UFC 1 Flyweight Tournament Title"
+    }
+  },
+  {
+    "EventName": "UFC Fight Night: Lewis vs. Spivac",
+    "FightDate": "2023-02-05T03:00Z",
+    "b_fighter": "JeongYeong, Lee",
+    "r_fighter": ", Yizha",
+    "AccoladeData": {
+      "Type": "Tournament",
+      "Name": "Road To UFC 1 Featherweight Tournament Title"
+    }
+  },
+  {
+    "EventName": "UFC 292: Sterling vs. O'Malley",
+    "FightDate": "2023-08-19T22:30Z",
+    "b_fighter": "Kurt, Holobaugh",
+    "r_fighter": "Austin, Hubbard",
+    "AccoladeData": ""
+  },
+  {
+    "EventName": "UFC 292: Sterling vs. O'Malley",
+    "FightDate": "2023-08-19T22:30Z",
+    "b_fighter": "Brad, Katona",
+    "r_fighter": "Cody, Gibson",
+    "AccoladeData": ""
+  },
+  {
+    "EventName": "UFC Fight Night: Whittaker vs. Aliskerov",
+    "FightDate": "2024-06-22T16:00Z",
+    "b_fighter": "Xiao, Long",
+    "r_fighter": "ChangHo, Lee",
+    "AccoladeData": ""
+  },
+  {
+    "EventName": "UFC Fight Night: Cannonier vs. Borralho",
+    "FightDate": "2024-08-24T23:00Z",
+    "b_fighter": "Robert, Valentin",
+    "r_fighter": "Ryan, Loder",
+    "AccoladeData": {
+      "Type": "Tournament",
+      "Name": "Ultimate Fighter 32 Middleweight Tournament Title"
+    }
+  },
+  {
+    "EventName": "UFC Fight Night: Cannonier vs. Borralho",
+    "FightDate": "2024-08-24T23:00Z",
+    "b_fighter": "Kaan, Ofli",
+    "r_fighter": "Mairon, Santos",
+    "AccoladeData": {
+      "Type": "Tournament",
+      "Name": "Ultimate Fighter 32 Featherweight Tournament Title"
+    }
+  },
+  {
+    "EventName": "UFC Fight Night: Yan vs. Figueiredo",
+    "FightDate": "2024-11-23T08:00Z",
+    "b_fighter": "Kiru, Sahota",
+    "r_fighter": "DongHun, Choi",
+    "AccoladeData": {
+      "Type": "Tournament",
+      "Name": "Road to UFC 3 Flyweight Tournament Title "
+    }
+  },
+  {
+    "EventName": "UFC Fight Night: Yan vs. Figueiredo",
+    "FightDate": "2024-11-23T08:00Z",
+    "b_fighter": "Baergeng, Jieleyisi",
+    "r_fighter": "SuYoung, You",
+    "AccoladeData": {
+      "Type": "Tournament",
+      "Name": "Road to UFC 3 Bantamweight Tournament Title "
+    }
+  },
+  {
+    "EventName": "UFC Fight Night: Yan vs. Figueiredo",
+    "FightDate": "2024-11-23T08:00Z",
+    "b_fighter": "Shi, Ming",
+    "r_fighter": "Feng, Xiaocan",
+    "AccoladeData": {
+      "Type": "Tournament",
+      "Name": "Road to UFC 3 Women's Strawweight Tournament Title "
+    }
+  },
+  {
+    "EventName": "UFC 319: Du Plessis vs. Chimaev",
+    "FightDate": "2025-08-16T22:30Z",
+    "b_fighter": "Alibi, Idiris",
+    "r_fighter": "Joseph, Morales",
+    "AccoladeData": {
+      "Type": "Tournament",
+      "Name": "Ultimate Fighter 33 Flyweight Tournament Title"
+    }
+  },
+  {
+    "EventName": "UFC Fight Night: Lopes vs. Silva",
+    "FightDate": "2025-09-13T19:00Z",
+    "b_fighter": "Rodrigo, Sezinando",
+    "r_fighter": "Daniil, Donchenko",
+    "AccoladeData": {
+      "Type": "Tournament",
+      "Name": "Ultimate Fighter 33 Welterweight Tournament Title"
+    }
+  }
+]
+

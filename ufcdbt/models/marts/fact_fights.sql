@@ -15,6 +15,7 @@ SELECT
   method,
   method_type,
   bout_weight,
+  bout_weight_id,
   bout_rounds,
   url,
   fight_date,

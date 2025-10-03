@@ -11,6 +11,7 @@ SELECT
   f.method,
   {{ fight_result_type('f.method') }} AS "method_type",
   f.bout_weight,
+  {{ generate_weight_class_id('f.bout_weight') }} AS "bout_weight_id",
   f.bout_rounds,
   f.url,
   f.start_time::timestamp::date AS "fight_date",
@@ -50,3 +51,13 @@ ON
   f.event_id = e.id
 WHERE
   CAST(organisation_data ->> 'OrganizationId' AS INTEGER) = 1
+  AND
+  b_fighter_id IS NOT NULL 
+  AND 
+  r_fighter_id IS NOT NULL
+  AND
+  b_fighter_status IS NOT NULL
+  AND
+  r_fighter_status IS NOT NULL
+  AND 
+  f.start_time::timestamp::date > '2000-01-01'

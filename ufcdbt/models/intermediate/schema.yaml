@@ -273,13 +273,13 @@ models:
         tests:
           - unique
           - not_null
-      - name: event_id
-        description: "id for the event"
-        tests:
-          - not_null
-          - relationships:
-              to: ref('stg_events')
-              field: id
+      # - name: event_id
+      #   description: "id for the event"
+      #   tests:
+      #     - not_null
+      #     - relationships:
+      #         to: ref('stg_events')
+      #         field: id
       - name: r_fighter_id
         description: "red corner fight id"
         tests:

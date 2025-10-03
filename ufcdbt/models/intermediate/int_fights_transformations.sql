@@ -15,6 +15,7 @@ SELECT
     f.method,
     f.method_type,
     f.bout_weight,
+    {{ generate_weight_class_id('f.bout_weight') }} AS "bout_weight_id",
     f.bout_rounds,
     f.url,
     f.fight_date,
@@ -61,7 +62,3 @@ JOIN {{ ref('stg_fighters') }} rf ON f.r_fighter_id = rf.id
 JOIN {{ ref('stg_fighters') }} bf ON f.b_fighter_id = bf.id
 WHERE 
     f.fight_date < NOW() 
-    AND 
-    f.r_fighter_status IS NOT NULL 
-    AND
-    f.b_fighter_status IS NOT NULL

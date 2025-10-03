@@ -10,3 +10,4 @@ __pycache__/
 logs/
 .local
 profiles.yml
+.envrc
