@@ -1,0 +1,48 @@
+WITH seconds_table AS (
+  SELECT
+    ground_time_seconds AS "g",
+    standing_time_seconds AS "s",
+    clinch_time_seconds AS "c"
+  FROM dbt_schema.fact_fights
+  WHERE 
+    ending_round = 3
+    AND
+    time='5:00'
+)
+-- clinch included in standing
+SELECT g + s AS "total", COUNT(g + s) AS "count" FROM seconds_table
+GROUP BY g + s
+ORDER BY total
+
++-------+-------+
+| total | count |
+|-------+-------|
+| 781   | 1     |
+| 885   | 1     |
+| 886   | 3     |
+| 887   | 2     |
+| 888   | 4     |
+| 889   | 6     |
+| 890   | 5     |
+| 891   | 3     |
+| 892   | 5     |
+| 893   | 4     |
+| 894   | 5     |
+| 895   | 15    |
+| 896   | 21    |
+| 897   | 31    |
+| 898   | 75    |
+| 899   | 345   |
+| 900   | 2182  |
+| 901   | 663   |
+| 902   | 183   |
+| 903   | 24    |
+| 904   | 8     |
+| 906   | 2     |
+| 907   | 1     |
+| 908   | 1     |
+| 909   | 1     |
+| 912   | 1     |
++-------+-------+
+SELECT 26
+
