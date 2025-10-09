@@ -15,6 +15,7 @@ SELECT
   trains_at_state,
   trains_at_country,
   stance,
+  reach,
   last_active,
   total_fights,
   total_wins,

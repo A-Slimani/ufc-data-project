@@ -18,6 +18,7 @@ SELECT
   f.weight_class_description,
   f.weight_class_order,
   f.stance,
+  f.reach,
   a.last_active,
   (f.wins + f.losses + f.draws) AS "total_fights",
   f.wins AS "total_wins",

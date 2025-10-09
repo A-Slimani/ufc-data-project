@@ -7,10 +7,6 @@ WITH t_values AS (
     clinch_time_seconds AS "clinch"
   FROM dbt_schema.fact_fights f
   LEFT JOIN dbt_schema.dim_fighters d
-  ON 
-    f.r_fighter_id = d.fighter_id 
-    AND
-    f.b_fighter_id = d.fighter_id
 ), ratio_values AS (
   SELECT 
     r_fighter_name,
@@ -33,3 +29,6 @@ SELECT
 FROM ratio_values
 GROUP BY ratio
 ORDER BY ratio
+
+-- GET REACH
+
