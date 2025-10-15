@@ -58,7 +58,7 @@ dbt_transformations = DockerOperator(
   api_version='auto',
   auto_remove='force',
   command='run --profiles-dir /usr/app/dbt --target railway',
-  docker_url="unix://var/run/docker.sock",  
+  docker_url="unix://var/run/docker.sock",
   network_mode='ufc-data-project_default',
   mounts=[
     Mount(
