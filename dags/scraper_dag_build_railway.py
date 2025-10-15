@@ -12,9 +12,9 @@ default_args = {
 }
 
 dag = DAG(
-  'scrape_ufc_build',
+  'scrape_ufc_build_railway',
   default_args=default_args,
-  description='scrape all ufc events',
+  description='scrape all ufc events for railway',
   schedule_interval=None,
   start_date=datetime.datetime(2025, 1, 1),
   catchup=False
@@ -29,7 +29,7 @@ scrape_fighters_and_events = DockerOperator(
   docker_url="unix://var/run/docker.sock",
   network_mode="ufc-data-project_default",
   environment={
-    'DB_URI': '{{ var.value.DB_URI }}',
+    'DB_URI': '{{ var.value.DB_URI_RAILWAY }}',
     'LOG_DIR': '{{ var.value.LOG_DIR }}'
   },
   tmp_dir='/tmp/airflow',
@@ -45,7 +45,7 @@ scrape_fights = DockerOperator(
   docker_url="unix://var/run/docker.sock",
   network_mode="ufc-data-project_default",
   environment={
-    'DB_URI': '{{ var.value.DB_URI }}',
+    'DB_URI': '{{ var.value.DB_URI_RAILWAY }}',
     'LOG_DIR': '{{ var.value.LOG_DIR }}'
   },
   tmp_dir='/tmp/airflow',
@@ -57,7 +57,7 @@ dbt_transformations = DockerOperator(
   image='ghcr.io/dbt-labs/dbt-postgres:1.9.0',
   api_version='auto',
   auto_remove='force',
-  command='run --profiles-dir /usr/app/dbt --target railway',
+  command='run --profiles-dir /usr/app/dbt --target dev',
   docker_url="unix://var/run/docker.sock",  
   network_mode='ufc-data-project_default',
   mounts=[

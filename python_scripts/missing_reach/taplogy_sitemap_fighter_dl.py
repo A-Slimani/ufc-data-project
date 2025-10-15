@@ -6,11 +6,11 @@ BASE_URL = "https://www.tapology.com/fightcenter/fighters/sitemap"
 MAX_RETRIES = 10
 
 async def get_links(index, semaphore, client):
-  url = f"{BASE_URL}_{index}.xml" if index > 1 else f"{BASE_URL}_{index}.xml"
+  url = f"{BASE_URL}_{index}.xml" if index > 1 else f"{BASE_URL}.xml"
   for attempt in range(MAX_RETRIES):
     try:
       async with semaphore:
-        print(f'scraping index: {index}, Attempt: { attempt + 1 } / { MAX_RETRIES }')
+        print(f'scraping index: {index}, URL:{url}, Attempt: { attempt + 1 } / { MAX_RETRIES }')
 
         response = await client.get(url, timeout=30.0)
 
@@ -18,7 +18,7 @@ async def get_links(index, semaphore, client):
 
         with open(f'./tapology_xmls/tapology_fighters_{index}.xml', 'w') as file:
           file.write(response.text)
-        
+
         print(f"scraping {index} success")
         return
 
