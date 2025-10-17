@@ -27,16 +27,13 @@ async def get_data(page, semaphore, pool, sleep_time):
   async with semaphore:
     try:
       await asyncio.sleep(sleep_time)
-
+      url = f"https://d29dxerjsp82wz.cloudfront.net/api/v3/event/live/{page}.json"
       async with hishel.AsyncCacheClient(
         storage=hishel.AsyncFileStorage(base_path=Path("./.cache/ufc_events/"), ttl=3600 * 24),
         verify=False,
       ) as client:
         try:
-          res = await client.get(
-            f"https://d29dxerjsp82wz.cloudfront.net/api/v3/event/live/{page}.json",
-            extensions={"force_cache": True},
-          )    
+          res = await client.get(url, extensions={"force_cache": True})
           if res.status_code != 200:
             logger.error(f"Error fetching data for page {page}: HTTP ERROR -- {res.status_code}")
             return
@@ -45,7 +42,7 @@ async def get_data(page, semaphore, pool, sleep_time):
           return
 
         json_data = res.json()
-        event_details = json_data["LiveEventDetail"]          
+        event_details = json_data["LiveEventDetail"]
 
         if event_details:
           event_data = {
@@ -57,6 +54,7 @@ async def get_data(page, semaphore, pool, sleep_time):
             "country": event_details["Location"]["Country"],
             "country_tricode": event_details["Location"]["TriCode"],
             "venue": event_details["Location"]["Venue"],
+            "url": url,
             "organisation_data": json.dumps(event_details["Organization"])
           }
           async with pool.acquire() as conn:
@@ -66,7 +64,7 @@ async def get_data(page, semaphore, pool, sleep_time):
               id, name, date, city, state, country, 
               country_tricode, venue, organisation_data, last_updated_at
             )
-            VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, CURRENT_TIMESTAMP)
+            VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, CURRENT_TIMESTAMP)
             ON CONFLICT (id) DO UPDATE SET
               id = EXCLUDED.id,
               name = EXCLUDED.name,
@@ -76,6 +74,7 @@ async def get_data(page, semaphore, pool, sleep_time):
               country = EXCLUDED.country,
               country_tricode = EXCLUDED.country_tricode,
               venue = EXCLUDED.venue,
+              url = EXCLUDED.url,
               organisation_data = EXCLUDED.organisation_data,
               last_updated_at = CURRENT_TIMESTAMP
             """,
@@ -87,6 +86,7 @@ async def get_data(page, semaphore, pool, sleep_time):
             event_data["country"],
             event_data["country_tricode"],
             event_data["venue"],
+            event_data["url"],
             event_data["organisation_data"]
             )
 
