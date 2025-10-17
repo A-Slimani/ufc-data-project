@@ -39,16 +39,31 @@ def process_file(i):
   
   
     for e in root.findall(f'{NAMESPACE}url/{NAMESPACE}loc'):
-      x_pre = e.text.strip().split('/')[-1].split('-')[1:]
+      x_pre = e.text.strip().split('/')[-1].split('-')
       x_name = ''
+      similarity = 0
+
+      # nickname or number
       if len(x_pre) > 2:
-        x_name = '-'.join(e.text.strip().split('/')[-1].split('-')[1:])
+        x_name_nickname = '-'.join(x_pre[1:])
+        x_name = '-'.join(x_pre)
+
+        s_nickname = fuzz.ratio(x_name_nickname, f_name) / 100.0
+        s_wo = fuzz.ratio(x_name, f_name) / 100.0
+
+        if s_nickname > s_wo:
+          similarity = s_nickname 
+          x_name = x_name_nickname
+        else:
+          similarity = s_wo
+          x_name = x_name
+
+      # no nickname and number
       else:
-        x_name = '-'.join(e.text.strip().split('/')[-1].split('-'))
+        x_name = '-'.join(x_pre)
+        similarity = fuzz.ratio(x_name, f_name) / 100.0
   
-      similarity = fuzz.ratio(x_name, f_name) / 100.0
-  
-      if similarity >= 0.9:
+      if similarity >= 0.5:
         fighter_dict[f_name].append(
           {
             'generated-name': f_name, 
@@ -86,7 +101,7 @@ if __name__ == "__main__":
   with open('matches.json', 'w') as file:
     json.dump(merged_dict, file, indent=2)
 
-  print("matches length: ", len(merged_dict))
+  print(f"matches / missing: {len(merged_dict)} / {len(json_data)}")
 
   end = time.time()
   print(f"total runtime: {end - start}")
