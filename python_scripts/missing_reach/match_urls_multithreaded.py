@@ -1,7 +1,5 @@
 from multiprocessing import Pool, cpu_count
 from collections import defaultdict
-from typing import Any
-
 from rapidfuzz import fuzz
 import xml.etree.ElementTree as ET
 import threading
@@ -26,8 +24,8 @@ def process_file(i):
   tree = ET.parse(f"./tapology_xmls/tapology_fighters_{i}.xml")
   root = tree.getroot()
 
-  fighter_dict = defaultdict(list) 
-  
+  fighter_dict = defaultdict(dict) 
+ 
   # matches = []
   for fighter in json_data:
     f_name = ""
@@ -36,42 +34,48 @@ def process_file(i):
       f_name = f"{fighter['first_name']}-{fighter['last_name']}-{nick_name}".lower()
     else:
       f_name = f"{fighter['first_name']}-{fighter['last_name']}".lower()
-  
-  
+ 
+ 
     for e in root.findall(f'{NAMESPACE}url/{NAMESPACE}loc'):
-      x_pre = e.text.strip().split('/')[-1].split('-')
-      x_name = ''
+      xml_name_preprocessed = e.text.strip().split('/')[-1].split('-')
+      xml_name = ''
       similarity = 0
 
       # nickname or number
-      if len(x_pre) > 2:
-        x_name_nickname = '-'.join(x_pre[1:])
-        x_name = '-'.join(x_pre)
+      if len(xml_name_preprocessed) > 2:
+        xml_nickname = '-'.join(xml_name_preprocessed[1:])
+        xml_name = '-'.join(xml_name_preprocessed)
+        xml_no_nickname = '-'.join(xml_name_preprocessed[:-1])
 
-        s_nickname = fuzz.ratio(x_name_nickname, f_name) / 100.0
-        s_wo = fuzz.ratio(x_name, f_name) / 100.0
+        s_nickname = fuzz.ratio(xml_nickname, f_name) / 100.0
+        s_name = fuzz.ratio(xml_name, f_name) / 100.0
+        s_no_nickname = fuzz.ratio(xml_no_nickname, f_name) / 100.0
 
-        if s_nickname > s_wo:
-          similarity = s_nickname 
-          x_name = x_name_nickname
-        else:
-          similarity = s_wo
-          x_name = x_name
+        options = [
+          (xml_nickname, s_nickname),
+          (xml_name, s_name),
+          (xml_no_nickname, s_no_nickname)
+        ]
 
-      # no nickname and number
+        xml_name, similarity = max(options, key=lambda x: x[1])
+
+      # no nickname and number 
       else:
-        x_name = '-'.join(x_pre)
-        similarity = fuzz.ratio(x_name, f_name) / 100.0
-  
-      if similarity >= 0.5:
-        fighter_dict[f_name].append(
-          {
-            'generated-name': f_name, 
-            'matched_name': x_name, 
-            'similarity': similarity, 
-            'url': e.text.strip()
-          }
-        )
+        xml_name = '-'.join(xml_name_preprocessed)
+        similarity = fuzz.ratio(xml_name, f_name) / 100.0
+
+      match = {
+        'generated-name': f_name,
+        'matched_name': xml_name,
+        'similarity': similarity,
+        'url': e.text.strip()
+      }
+ 
+      if fighter_dict[f_name]:
+        if fighter_dict[f_name]['similarity'] < match['similarity']:
+          fighter_dict[f_name] = match
+      elif similarity >= 0.8:
+        fighter_dict[f_name] = match
 
   end = time.time()
 
@@ -88,20 +92,25 @@ if __name__ == "__main__":
   # pre_load_names()
 
   with Pool(processes=cpu_count()) as pool:
-    results = pool.map(process_file, range(1, 115))
+    results = pool.map(process_file, range(1, 5))
 
-  print(results)
-  final_result = defaultdict(list)
-  for d in results:
-     for key, value in d.items():
-         final_result[key].extend(value)
+  final_results = defaultdict(dict) 
 
-  merged_dict = dict(final_result)
+  for result in results:
+    for key, value in result.items():
+      if final_results[key]:
+        # if final_results[key]['similarity'] < result[key]['similarity']:
+        #   final_results[key] = result[key]
+        # print(final_results[key]['similarity'])
+        print(key, final_results[key], result[key]['similarity'])
+      else:
+          final_results[key] = result[key]
 
   with open('matches.json', 'w') as file:
-    json.dump(merged_dict, file, indent=2)
+    json.dump(results, file, indent=2)
 
-  print(f"matches / missing: {len(merged_dict)} / {len(json_data)}")
+
+  print(f"matches / total: {len(results)} / {len(json_data)}")
 
   end = time.time()
   print(f"total runtime: {end - start}")

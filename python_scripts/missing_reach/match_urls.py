@@ -1,71 +1,86 @@
+from collections import defaultdict
+from rapidfuzz import fuzz
 import xml.etree.ElementTree as ET
-from difflib import SequenceMatcher, get_close_matches
-import threading
-import asyncio
 import json
-import time
 
-start = time.time()
-
-def similarity_ratio(s1, s2):
-  return SequenceMatcher(None, s1, s2).ratio()
-
-json_data = []
-with open("missing_nulls.json", "r") as file:
-  json_data = json.load(file)
-
-# for fighter in json_data:
-#   print(f"{fighter['first_name']}-{fighter['last_name']}")
 
 NAMESPACE = "{http://www.sitemaps.org/schemas/sitemap/0.9}"
 
-def process_file(i):
+with open("missing_reach.json", "r") as file:
+  json_data = json.load(file)
+
+results = defaultdict(dict) 
+
+for i in range(1, 115):
+  print('parsing file number: ', i)
   tree = ET.parse(f"./tapology_xmls/tapology_fighters_{i}.xml")
   root = tree.getroot()
 
-  def match_fighter(fighter, root):
-    name = f"{fighter['first_name']}-{fighter['last_name']}".lower() 
-    # print(f"searching for: {name}")
-    for e in root.findall(f'{NAMESPACE}url/{NAMESPACE}loc'):
-      name2 = "-".join(e.text.strip().split('/')[-1].split('-')[1:])
-      s = similarity_ratio(name, name2)
-      if s >= 0.95:
-        print(name, name2, s)
-
-  threads = []
   for fighter in json_data:
-    t = threading.Thread(target=match_fighter, args=(fighter, root))
-    t.start()
-    threads.append(t)
-  
-  for t in threads:
-    t.join()
+    f_name = ""
+    first_name = '-'.join(fighter['first_name'].split(' '))
+    last_name = '-'.join(fighter['last_name'].split(' '))
+    if fighter['nick_name'] is not None:
+      nick_name = '-'.join(fighter['nick_name'].split(' '))
+      f_nickname = f"{first_name}-{last_name}-{nick_name}".lower()
+      f_name = f"{first_name}-{last_name}".lower()
+    else:
+      f_name = f"{first_name}-{last_name}".lower()
+
+    for e in root.findall(f'{NAMESPACE}url/{NAMESPACE}loc'):
+      xml_name_preprocessed = e.text.strip().split('/')[-1].split('-')
+      xml_name = ""
+      similarity = 0
+
+      if len(xml_name_preprocessed) > 2:
+        xml_name = '-'.join(xml_name_preprocessed)
+        xml_nickname = '-'.join(xml_name_preprocessed[1:])
+        xml_no_nickname = '-'.join(xml_name_preprocessed[:-1])
+
+        s_nickname = fuzz.ratio(xml_nickname, f_nickname) / 100.0
+        s_name = fuzz.ratio(xml_name, f_nickname) / 100.0
+        s_no_nickname = fuzz.ratio(xml_no_nickname, f_nickname) / 100.0
+
+        s2_nickname = fuzz.ratio(xml_nickname, f_name) / 100.0
+        s2_name = fuzz.ratio(xml_name, f_name) / 100.0
+        s2_no_nickname = fuzz.ratio(xml_no_nickname, f_name) / 100.0
+
+        options = [
+          (xml_nickname, s_nickname),
+          (xml_name, s_name),
+          (xml_no_nickname, s_no_nickname),
+          (xml_nickname, s2_nickname),
+          (xml_name, s2_name),
+          (xml_no_nickname, s2_no_nickname)
+        ]
+
+        xml_name, similarity = max(options, key=lambda x: x[1])
+
+      else:
+        xml_name = '-'.join(xml_name_preprocessed)
+        similarity = fuzz.ratio(xml_name, f_name) / 100.0
+
+      match = {
+        'generated-name': f_name,
+        'matched_name': xml_name,
+        'similarity': similarity,
+        'url': e.text.strip()
+      }
+
+      if results[f_name]:
+        if results[f_name]['similarity'] < match['similarity']:
+          results[f_name] = match
+      elif similarity >= 0.65:
+        results[f_name] = match
+
+count = 0
+for result, value in results.items():
+  if value['similarity'] > 0.8:
+    count += 1
+
+print(f">80 matches / total: {count} / {len(json_data)}")
+
+with open('matches.json', 'w') as file:
+  json.dump(results, file, indent=2)
 
 
-
-
-# STANDARD
-# for i in range(1, 115):
-#  process_file(i)
-
-# MULTITHREADED
-threads = []
-for i in range(1, 115):
-  t = threading.Thread(target=process_file, args=(i,))
-  t.start()
-  threads.append(t)
-
-for t in threads:
-  t.join()
-
-# ASYNCHRONOUS
-# async def main():
-#   coroutines = [process_file(i) for i in range(1, 115)]
-#   await asyncio.gather(*coroutines)
-#   
-# asyncio.run(main())
-
-  
-end = time.time()
-
-print(f"Execution time: {end - start} seconds")
