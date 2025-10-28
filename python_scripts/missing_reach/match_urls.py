@@ -18,6 +18,7 @@ for i in range(1, 115):
 
   for fighter in json_data:
     f_name = ""
+    f_nickname = ""
     first_name = '-'.join(fighter['first_name'].split(' '))
     last_name = '-'.join(fighter['last_name'].split(' '))
     if fighter['nick_name'] is not None:
@@ -67,18 +68,22 @@ for i in range(1, 115):
         'url': e.text.strip()
       }
 
-      if results[f_name]:
-        if results[f_name]['similarity'] < match['similarity']:
-          results[f_name] = match
-      elif similarity >= 0.65:
+      if similarity == 1:
         results[f_name] = match
 
-count = 0
-for result, value in results.items():
-  if value['similarity'] > 0.8:
-    count += 1
+      # if results[f_name]:
+      #   if similarity > results[f_name]['similarity']:
+      #     results[f_name] = match
+      # else:
+      #   if similarity >= 0.8:
+      #     results[f_name] = match
 
-print(f">80 matches / total: {count} / {len(json_data)}")
+
+# for result, value in results.items():
+#   if value['similarity'] > 0.8:
+#     count += 1
+
+# print(f">80 matches / total: {count} / {len(json_data)}")
 
 with open('matches.json', 'w') as file:
   json.dump(results, file, indent=2)
