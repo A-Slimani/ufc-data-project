@@ -33,7 +33,10 @@ SELECT
   p.ufc_win_percentage,
   COALESCE(b.ufc_wins_by_ko_tko, 0) AS "ufc_wins_by_ko_tko",
   COALESCE(b.ufc_wins_by_sub, 0) AS "ufc_wins_by_sub",
-  COALESCE(b.ufc_wins_by_dec, 0) AS "ufc_wins_by_dec", 
+  COALESCE(b.ufc_wins_by_dec, 0) AS "ufc_wins_by_dec",
+  COALESCE(l.ufc_losses_by_ko_tko, 0) AS "ufc_losses_by_ko_tko",
+  COALESCE(l.ufc_losses_by_sub, 0) AS "ufc_losses_by_sub",
+  COALESCE(l.ufc_losses_by_dec, 0) AS "ufc_losses_by_dec",
   COALESCE(fs.career_knockdowns, 0) AS "career_knockdowns",
   COALESCE(fs.career_takedowns_attempted, 0) AS "career_takedowns_attempted",
   COALESCE(fs.career_takedowns_landed, 0) AS "career_takedowns_landed",
@@ -54,5 +57,6 @@ SELECT
 FROM {{ ref('int_fighter_ufc_stats') }} p
 LEFT JOIN {{ ref('stg_fighters') }} f ON f.id = p.fighter_id
 LEFT JOIN {{ ref('int_fighter_ufc_wins_by') }} b ON p.fighter_id = b.fighter_id
-LEFT JOIN {{ ref('int_fighter_fight_stats') }} fs ON fs.fighter_id = f.id 
+LEFT JOIN {{ ref('int_fighter_ufc_losses_by') }} l ON p.fighter_id = l.fighter_id
+LEFT JOIN {{ ref('int_fighter_fight_stats') }} fs ON fs.fighter_id = f.id
 lEFT JOIN {{ ref('int_fighter_is_active')}} a ON a.fighter_id = f.id
