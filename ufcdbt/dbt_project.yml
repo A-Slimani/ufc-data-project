@@ -34,6 +34,12 @@ models:
     # Config indicated by + and applies to all files under models/example/
     staging:
       +materialized: table 
+      +post-hook:
+        - "GRANT SELECT ON {{ this }} TO web_anon"
+
+on-run-end:
+  - "GRANT USAGE ON SCHEMA dbt_schema TO web_anon"
+  - "GRANT SELECT ON ALL TABLES IN SCHEMA dbt_schema TO web_anon"
 
 vars:
   schema_name: "{{ 'ufcdb' if target.name == 'local' else 'neondb' }}"
