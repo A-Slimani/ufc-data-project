@@ -31,6 +31,14 @@ SELECT
   p.ufc_draws,
   p.ufc_no_contests,
   p.ufc_win_percentage,
+  r."3R_1_finish_percentage",
+  r."3R_2_finish_percentage",
+  r."3R_3_finish_percentage",
+  r."5R_1_finish_percentage",
+  r."5R_2_finish_percentage",
+  r."5R_3_finish_percentage",
+  r."5R_4_finish_percentage",
+  r."5R_5_finish_percentage",
   COALESCE(b.ufc_wins_by_ko_tko, 0) AS "ufc_wins_by_ko_tko",
   COALESCE(b.ufc_win_percentage_by_ko_tko, 0) AS "ufc_win_percentage_by_ko_tko",
   COALESCE(b.ufc_wins_by_sub, 0) AS "ufc_wins_by_sub",
@@ -65,4 +73,5 @@ LEFT JOIN {{ ref('stg_fighters') }} f ON f.id = p.fighter_id
 LEFT JOIN {{ ref('int_fighter_ufc_wins_by') }} b ON p.fighter_id = b.fighter_id
 LEFT JOIN {{ ref('int_fighter_ufc_losses_by') }} l ON p.fighter_id = l.fighter_id
 LEFT JOIN {{ ref('int_fighter_fight_stats') }} fs ON fs.fighter_id = f.id
-lEFT JOIN {{ ref('int_fighter_is_active')}} a ON a.fighter_id = f.id
+LEFT JOIN {{ ref('int_fighter_is_active')}} a ON a.fighter_id = f.id
+LEFT JOIN {{ ref('int_fighter_ufc_wins_by_round') }} r ON r.fighter_id = p.fighter_id
